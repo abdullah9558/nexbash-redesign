@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" style="scroll-behavior:smooth;">
+<head>
+<meta charset="UTF-8">
+<title>NexBash — Enterprise Intelligence</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#0a0a0a; --bg2:#121212; --card:#161616; --card2:#1c1c1c;
+  --text:#fafafa; --sub:#999; --orange:#ff4500; --orangeD:#331300; --border:rgba(255,255,255,.08);
+  --green:#4ade80;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:radial-gradient(circle at 20% 0%,#1a0800 0%,var(--bg) 45%),var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.5;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px;}
+nav{position:sticky;top:0;display:flex;justify-content:space-between;align-items:center;padding:20px 64px;background:rgba(10,10,10,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);z-index:10;}
+.logo{font-weight:800;font-size:20px;letter-spacing:.5px;}
+.logo span{background:linear-gradient(90deg,#ff4500,#ff8a00);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.navlinks{display:flex;gap:36px;}
+.navlinks a{color:var(--sub);font-size:14px;font-weight:500;transition:.25s;position:relative;}
+.navlinks a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:1px;background:var(--orange);transition:.25s;}
+.navlinks a:hover{color:var(--text);}
+.navlinks a:hover::after{width:100%;}
+.btn{background:linear-gradient(135deg,#ff4500,#ff7a00);color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;font-size:14px;display:inline-block;transition:.25s;border:none;cursor:pointer;box-shadow:0 0 0 rgba(255,69,0,0);}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,69,0,.45);}
+.btn-outline{border:1px solid var(--border);padding:10px 20px;border-radius:8px;font-weight:600;font-size:14px;}
+
+section{padding:100px 64px;}
+.eyebrow{display:flex;align-items:center;gap:8px;justify-content:center;color:var(--orange);font-weight:600;font-size:13px;letter-spacing:1px;margin-bottom:16px;}
+.eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--orange);}
+h1{font-size:56px;font-weight:800;text-align:center;max-width:920px;margin:0 auto 24px;line-height:1.15;background:linear-gradient(180deg,#fff 40%,#bbb 100%);-webkit-background-clip:text;background-clip:text;color:transparent;}
+h2{font-size:40px;font-weight:800;text-align:center;max-width:760px;margin:0 auto 16px;}
+.sub{color:var(--sub);text-align:center;max-width:620px;margin:0 auto 48px;font-size:17px;}
+
+.hero{text-align:center;}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--card2);border:1px solid rgba(255,69,0,.4);padding:6px 14px;border-radius:100px;font-size:13px;color:var(--orange);font-weight:500;margin-bottom:32px;box-shadow:0 0 20px rgba(255,69,0,.15);}
+.badge::before{content:"●";animation:pulse 1.6s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.options{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:900px;margin:40px auto 24px;}
+.opt{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 12px;text-align:center;font-weight:600;font-size:15px;cursor:pointer;transition:.25s;}
+.opt:hover{transform:translateY(-4px);border-color:var(--orange);box-shadow:0 10px 30px rgba(255,69,0,.2);}
+.opt.active{background:linear-gradient(135deg,#ff4500,#ff7a00);border-color:var(--orange);color:#fff;box-shadow:0 8px 24px rgba(255,69,0,.35);}
+.note{color:var(--sub);font-size:13px;}
+
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:48px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px 24px;transition:.25s;}
+.card:hover{transform:translateY(-6px);border-color:rgba(255,69,0,.5);box-shadow:0 16px 40px rgba(255,69,0,.12);}
+.card h3{font-size:22px;font-weight:700;margin-bottom:12px;}
+.tag{font-size:12px;font-weight:600;color:var(--orange);margin-bottom:6px;}
+.desc{color:var(--sub);font-size:13px;margin-bottom:16px;}
+hr.div{border:none;border-top:1px solid var(--border);margin:16px 0;}
+.check{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.check li{display:flex;gap:10px;align-items:center;font-size:14px;}
+.check li::before{content:"✓";width:18px;height:18px;background:rgba(74,222,128,.15);color:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.pill{display:inline-block;background:var(--card2);padding:6px 12px;border-radius:100px;font-size:12px;font-weight:600;}
+
+.bg2{background:var(--bg2);}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px;}
+.pkg{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px 28px;transition:.25s;}
+.pkg:hover{transform:translateY(-6px);box-shadow:0 16px 40px rgba(255,69,0,.15);}
+.pkg.highlight{background:linear-gradient(160deg,#ff5a1f,#ff8a00);border-color:var(--orange);color:#fff;}
+.pkg.highlight .check li::before{background:rgba(255,255,255,.2);color:#fff;}
+.pkg.highlight .desc{color:rgba(255,255,255,.85);}
+.badge2{display:inline-block;background:#fff;color:var(--orange);font-size:10px;font-weight:800;padding:4px 10px;border-radius:100px;margin-bottom:14px;}
+.pkg h3{font-size:24px;font-weight:700;margin-bottom:8px;}
+
+.steps{display:flex;justify-content:center;align-items:center;margin-top:48px;flex-wrap:wrap;}
+.step{display:flex;flex-direction:column;align-items:center;gap:10px;width:100px;}
+.circle{width:56px;height:56px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;}
+.step.first .circle{background:linear-gradient(135deg,#ff4500,#ff8a00);border-color:var(--orange);box-shadow:0 0 24px rgba(255,69,0,.4);}
+.circle{transition:.25s;}
+.step:hover .circle{transform:scale(1.08);border-color:var(--orange);}
+.step span{font-size:13px;font-weight:600;}
+.line{width:46px;height:2px;background:var(--border);margin-bottom:32px;}
+
+.story{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:28px 24px;font-size:14px;transition:.25s;}
+.story:hover{transform:translateY(-6px);border-color:rgba(255,69,0,.5);box-shadow:0 16px 40px rgba(255,69,0,.12);}
+.story .lbl{font-size:11px;font-weight:700;color:var(--sub);margin:12px 0 6px;}
+.story .lbl:first-child{margin-top:0;}
+.story .lbl.sol{color:var(--orange);}
+.story .lbl.res{color:var(--green);}
+.story .result{font-weight:600;font-size:15px;}
+
+.faq{max-width:800px;margin:48px auto 0;display:flex;flex-direction:column;gap:12px;}
+.faq-item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;cursor:pointer;transition:.2s;}
+.faq-item:hover{border-color:rgba(255,69,0,.4);}
+.faq-q{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:16px;}
+.faq-a{display:block;color:var(--sub);font-size:14px;margin-top:0;max-height:0;overflow:hidden;opacity:0;transition:max-height .3s ease,opacity .3s ease,margin-top .3s ease;}
+.faq-item.open .faq-a{max-height:200px;opacity:1;margin-top:10px;}
+.faq-item.open .faq-q .plus{transform:rotate(45deg);}
+.plus{transition:.2s;font-weight:700;}
+
+footer{text-align:center;background:radial-gradient(circle at 50% 0%,#2a0e00 0%,var(--card2) 60%);}
+footer h2{font-size:44px;}
+.footlinks{display:flex;gap:32px;justify-content:center;margin:32px 0;color:var(--sub);font-size:13px;flex-wrap:wrap;}
+.copy{color:var(--sub);font-size:12px;}
+
+@media(max-width:900px){
+  nav{padding:16px 24px;} .navlinks{display:none;}
+  section{padding:64px 24px;}
+  h1{font-size:36px;} h2{font-size:28px;}
+  .options,.grid4,.grid3{grid-template-columns:repeat(2,1fr);}
+  .steps{gap:8px;} .line{display:none;}
+}
+@media(max-width:560px){
+  nav{padding:14px 16px;}
+  .logo{font-size:17px;}
+  .btn{padding:8px 14px;font-size:13px;}
+  section{padding:48px 16px;}
+  h1{font-size:28px;} h2{font-size:22px;}
+  .sub{font-size:15px;margin-bottom:32px;}
+  .options,.grid4,.grid3{grid-template-columns:1fr;gap:14px;}
+  .opt{padding:20px 12px;}
+  .steps{flex-direction:column;gap:16px;}
+  .footlinks{gap:16px;font-size:12px;}
+  .badge{font-size:12px;padding:5px 12px;}
+}
+</style>
+</head>
+<body>
+
+<div id="glow" style="position:fixed;width:180px;height:180px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,69,0,.15),transparent 70%);transform:translate(-50%,-50%);z-index:1;left:0;top:0;"></div>
+<nav>
+  <div class="logo">NEX<span>BASH</span></div>
+  <div class="navlinks">
+    <a href="#solutions">GIS Studio</a>
+    <a href="#solutions">AI & ML Lab</a>
+    <a href="#packages">Packages</a>
+    <a href="#stories">Case Studies</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="#contact" class="btn">Get Started</a>
+</nav>
+
+<section class="hero">
+  <div class="badge">What would you like us to build?</div>
+  <h1>Enterprise intelligence, built for mission-critical systems</h1>
+  <p class="sub">Nexbash combines advanced engineering, domain expertise, and disciplined execution to deliver GIS intelligence, AI/ML systems, and digital platforms that operate at scale.</p>
+  <div class="options" id="options">
+    <div class="opt">GIS Studio</div>
+    <div class="opt active">AI & ML Lab</div>
+    <div class="opt">Mobile & Web App</div>
+    <div class="opt">Data Engineering</div>
+    <div class="opt">Cloud & DevOps</div>
+    <div class="opt">Digital Platforms</div>
+    <div class="opt">Architecture</div>
+    <div class="opt">QA & Security</div>
+  </div>
+  <div class="note">Selecting a capability updates the sections below in real time.</div>
+</section>
+
+<section id="solutions">
+  <div class="eyebrow">SOLUTIONS</div>
+  <h2>Every capability, explained in plain business terms</h2>
+  <p class="sub">Not a list of technologies. A clear picture of who it's for, what's included, and what you get back.</p>
+  <div class="grid4">
+    <div class="card">
+      <h3>GIS Studio</h3>
+      <div class="tag">FOR</div><div class="desc">Organizations managing spatial data, mapping, and location intelligence.</div>
+      <div class="tag">SOLVES</div><div class="desc">Fragmented location data with no unified mapping or analysis layer.</div>
+      <hr class="div">
+      <ul class="check"><li>Custom GIS platform</li><li>Spatial database & APIs</li><li>Interactive map dashboards</li><li>Geospatial analytics</li><li>Documentation</li></ul>
+      <span class="pill">⏱ 6–10 weeks</span>
+    </div>
+    <div class="card">
+      <h3>AI & ML Lab</h3>
+      <div class="tag">FOR</div><div class="desc">Teams wanting automation, insight, or a smarter product.</div>
+      <div class="tag">SOLVES</div><div class="desc">Manual work, slow decisions, generic non-custom tools.</div>
+      <hr class="div">
+      <ul class="check"><li>Custom AI/ML model</li><li>Data pipeline</li><li>Admin dashboard</li><li>Monitoring & retraining</li><li>Documentation</li></ul>
+      <span class="pill">⏱ 4–12 weeks</span>
+    </div>
+    <div class="card">
+      <h3>Mobile & Web App</h3>
+      <div class="tag">FOR</div><div class="desc">Companies reaching customers on web, iOS, and Android.</div>
+      <div class="tag">SOLVES</div><div class="desc">Slow, outdated, or non-existent digital presence.</div>
+      <hr class="div">
+      <ul class="check"><li>Responsive website / app</li><li>Secure backend & database</li><li>Admin dashboard</li><li>Hosting, domain, SSL</li><li>Support</li></ul>
+      <span class="pill">⏱ 2–8 weeks</span>
+    </div>
+    <div class="card">
+      <h3>Data Engineering</h3>
+      <div class="tag">FOR</div><div class="desc">Growing companies juggling disconnected data sources.</div>
+      <div class="tag">SOLVES</div><div class="desc">No single source of truth across departments.</div>
+      <hr class="div">
+      <ul class="check"><li>Data pipelines & warehousing</li><li>Reporting dashboards</li><li>Role-based access</li><li>Integrations</li><li>Training</li></ul>
+      <span class="pill">⏱ 8–16 weeks</span>
+    </div>
+  </div>
+</section>
+
+<section class="bg2" id="packages">
+  <div class="eyebrow">PACKAGES</div>
+  <h2>What you'll get — not just what we do</h2>
+  <div class="grid3">
+    <div class="pkg">
+      <h3>Starter</h3>
+      <div class="desc">For a first, credible digital presence.</div>
+      <hr class="div">
+      <ul class="check"><li>Responsive website</li><li>UI/UX design</li><li>Hosting + domain + SSL</li><li>Basic analytics</li><li>Launch support</li></ul>
+    </div>
+    <div class="pkg highlight">
+      <div class="badge2">MOST POPULAR</div>
+      <h3>Growth</h3>
+      <div class="desc">For businesses ready to scale.</div>
+      <hr class="div">
+      <ul class="check"><li>Everything in Starter</li><li>Secure backend & database</li><li>Admin dashboard</li><li>API integrations</li><li>Documentation & 30-day support</li></ul>
+    </div>
+    <div class="pkg">
+      <h3>Enterprise</h3>
+      <div class="desc">For complex, multi-system products.</div>
+      <hr class="div">
+      <ul class="check"><li>Everything in Growth</li><li>Custom architecture</li><li>Advanced security & compliance</li><li>Dedicated deployment pipeline</li><li>Full source code ownership</li></ul>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="eyebrow">PROCESS</div>
+  <h2>From idea to launch — the journey we take together</h2>
+  <div class="steps">
+    <div class="step first"><div class="circle">1</div><span>Discovery</span></div><div class="line"></div>
+    <div class="step"><div class="circle">2</div><span>Planning</span></div><div class="line"></div>
+    <div class="step"><div class="circle">3</div><span>Design</span></div><div class="line"></div>
+    <div class="step"><div class="circle">4</div><span>Development</span></div><div class="line"></div>
+    <div class="step"><div class="circle">5</div><span>Testing</span></div><div class="line"></div>
+    <div class="step"><div class="circle">6</div><span>Launch</span></div><div class="line"></div>
+    <div class="step"><div class="circle">7</div><span>Support</span></div>
+  </div>
+</section>
+
+<section class="bg2" id="stories">
+  <div class="eyebrow">SUCCESS STORIES</div>
+  <h2>Real problems, real solutions, real results</h2>
+  <div class="grid3">
+    <div class="story">
+      <div class="lbl">PROBLEM</div>Client's manual booking process caused missed appointments and lost revenue.
+      <div class="lbl sol">↓ SOLUTION</div>Built a custom booking platform with admin dashboard and automated reminders.
+      <div class="lbl res">↓ RESULT</div><div class="result">40% fewer missed appointments within 2 months.</div>
+    </div>
+    <div class="story">
+      <div class="lbl">PROBLEM</div>Outdated site was slow, not mobile-friendly, and ranked poorly.
+      <div class="lbl sol">↓ SOLUTION</div>Rebuilt as a fast, responsive site with modern UI and SEO foundations.
+      <div class="lbl res">↓ RESULT</div><div class="result">3x increase in organic traffic in the first quarter.</div>
+    </div>
+    <div class="story">
+      <div class="lbl">PROBLEM</div>Disconnected spreadsheets made real-time inventory tracking impossible.
+      <div class="lbl sol">↓ SOLUTION</div>Delivered a custom ERP with live inventory and reporting dashboards.
+      <div class="lbl res">↓ RESULT</div><div class="result">Saved ~15 hours/week of manual reconciliation.</div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="eyebrow">FAQ</div>
+  <h2>Questions you're probably asking</h2>
+  <div class="faq" id="faqlist">
+    <div class="faq-item"><div class="faq-q"><span>What exactly is included in the price?</span><span class="plus">+</span></div><div class="faq-a">Every deliverable is listed upfront — design, backend, hosting, domain, SSL, documentation, and support — so there are no hidden extras.</div></div>
+    <div class="faq-item"><div class="faq-q"><span>How long does a typical project take?</span><span class="plus">+</span></div><div class="faq-a">Depends on scope: a website takes 2–4 weeks, larger systems like GIS or AI solutions take 4–16 weeks.</div></div>
+    <div class="faq-item"><div class="faq-q"><span>Do I own the source code?</span><span class="plus">+</span></div><div class="faq-a">Yes. Source code, documentation, and credentials are handed over as part of delivery.</div></div>
+    <div class="faq-item"><div class="faq-q"><span>What happens after launch?</span><span class="plus">+</span></div><div class="faq-a">Every package includes a support window, and ongoing support plans are available for continued updates.</div></div>
+  </div>
+</section>
+
+<footer id="contact">
+  <h2>Ready to see exactly what you'll get?</h2>
+  <p class="sub">Tell us what you're building and we'll map out the deliverables, timeline, and outcome — no jargon.</p>
+  <a href="#" class="btn">Start Your Project →</a>
+  <div class="footlinks">
+    <a href="#">Home</a><a href="#solutions">Solutions</a><a href="#packages">Packages</a>
+    <a href="#process">Process</a><a href="#stories">Success Stories</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+  </div>
+  <div class="copy">© 2026 NexBash Systems. All rights reserved.</div>
+</footer>
+
+<script>
+document.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',()=>{
+  document.querySelectorAll('.opt').forEach(x=>x.classList.remove('active'));
+  o.classList.add('active');
+  document.getElementById('solutions').scrollIntoView({behavior:'smooth'});
+}));
+document.querySelectorAll('.faq-item').forEach(f=>f.addEventListener('click',()=>f.classList.toggle('open')));
+const glow=document.getElementById('glow');
+document.addEventListener('mousemove',e=>{glow.style.left=e.clientX+'px';glow.style.top=e.clientY+'px';});
+</script>
+</body>
+</html>
