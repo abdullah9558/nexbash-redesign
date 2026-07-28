@@ -2,7 +2,19 @@
   "name": "nexbash",
   "version": "1.0.0",
   "private": true,
+  "description": "Lightweight rewrite of the original single-page site.",
+  "homepage": "https://github.com/abdullah9558/nexbash-redesign#readme",
+  "bugs": {
+    "url": "https://github.com/abdullah9558/nexbash-redesign/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdullah9558/nexbash-redesign.git"
+  },
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:web\" \"npm run dev:api\"",
     "dev:web": "next dev -p 3000",
