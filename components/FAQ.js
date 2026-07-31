@@ -1,26 +1,46 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-export default function FAQ({ faq = [] }) {
-  const [open, setOpen] = useState(null);
+export default function FAQ({ faq }) {
+  const [open, setOpen] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (!faq?.length || paused) return undefined;
+    const id = window.setInterval(() => {
+      setOpen((i) => (i + 1) % faq.length);
+    }, 4500);
+    return () => window.clearInterval(id);
+  }, [faq?.length, paused]);
 
   return (
-    <section id="faq">
-      <div className="eyebrow">FAQ</div>
-      <h2>Questions you&apos;re probably asking</h2>
+    <section
+      className="band screen"
+      id="faq"
+      data-reveal
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <header className="band-head reveal-child" style={{ '--i': 0 }}>
+        <p className="kicker">FAQ</p>
+        <h2>Straight answers</h2>
+      </header>
       <div className="faq">
         {faq.map((item, i) => (
           <div
-            className={`faq-item${open === i ? ' open' : ''}`}
             key={item.q}
-            onClick={() => setOpen(open === i ? null : i)}
+            className={`faq-row reveal-child ${open === i ? 'open' : ''}`}
+            style={{ '--i': i + 1 }}
+            onMouseEnter={() => setOpen(i)}
           >
-            <div className="faq-q">
-              <span>{item.q}</span>
-              <span className="plus">+</span>
+            <button type="button" onClick={() => setOpen(i)}>
+              {item.q}
+              <span className="faq-icon">{open === i ? '−' : '+'}</span>
+            </button>
+            <div className="faq-a">
+              <p>{item.a}</p>
             </div>
-            <div className="faq-a">{item.a}</div>
           </div>
         ))}
       </div>

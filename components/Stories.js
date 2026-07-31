@@ -1,334 +1,287 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import useDragSlide from '@/components/useDragSlide';
+import { ChevronLeft, ChevronRight } from '@/components/NavArrows';
 
 export default function Stories({ stories = [] }) {
+  const [idx, setIdx] = useState(0);
+  const [dir, setDir] = useState(1);
   const [viewAllOpen, setViewAllOpen] = useState(false);
   const [activeStory, setActiveStory] = useState(null);
-  const wrapRef = useRef(null);
-  const trackRef = useRef(null);
-  const idxRef = useRef(0);
-  const timerRef = useRef(null);
+  const [paused, setPaused] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const press = useRef({ x: 0, y: 0, moved: false });
   const total = stories.length;
+
+  const step = useCallback(
+    (delta) => {
+      setDir(delta);
+      setIdx((i) => (i + delta + total) % total);
+    },
+    [total]
+  );
+
+  const { viewportRef, trackRef, didDrag } = useDragSlide(step);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!total || paused || activeStory || viewAllOpen) return undefined;
+    const timer = setInterval(() => {
+      setDir(1);
+      setIdx((i) => (i + 1) % total);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, [total, paused, activeStory, viewAllOpen]);
 
   useEffect(() => {
     const onKey = (e) => {
       if (e.key !== 'Escape') return;
-      setActiveStory((prev) => {
-        if (prev) return null;
-        setViewAllOpen(false);
-        return null;
-      });
+      if (activeStory) setActiveStory(null);
+      else setViewAllOpen(false);
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
+  }, [activeStory]);
+
+  const openStory = useCallback((story) => {
+    if (!story) return;
+    setViewAllOpen(false);
+    setActiveStory(story);
   }, []);
 
-  useEffect(() => {
-    if (!total || !wrapRef.current || !trackRef.current) return;
-
-    const wrap = wrapRef.current;
-    const track = trackRef.current;
-    const viewport = wrap.querySelector('.carousel-viewport');
-    idxRef.current = total;
-
-    function render(instant) {
-      const cards = [...track.children];
-      if (!cards.length) return;
-      const cardWidth = cards[0].offsetWidth;
-      const gap = parseFloat(getComputedStyle(track).gap) || 20;
-      const offset =
-        viewport.offsetWidth / 2 - cardWidth / 2 - idxRef.current * (cardWidth + gap);
-      track.style.transition = instant ? 'none' : 'transform .5s ease';
-      track.style.transform = `translateX(${offset}px)`;
-      cards.forEach((c, i) => c.classList.toggle('active', i === idxRef.current));
-    }
-
-    function go(dir) {
-      idxRef.current += dir;
-      render();
-      if (idxRef.current >= total * 2) {
-        setTimeout(() => {
-          idxRef.current -= total;
-          render(true);
-        }, 520);
-      }
-      if (idxRef.current < total) {
-        setTimeout(() => {
-          idxRef.current += total;
-          render(true);
-        }, 520);
-      }
-    }
-
-    let delayTimer = null;
-
-    function clearAuto() {
-      clearTimeout(delayTimer);
-      clearInterval(timerRef.current);
-      delayTimer = null;
-      timerRef.current = null;
-    }
-
-    function startAuto() {
-      clearAuto();
-      timerRef.current = setInterval(() => go(1), 2000);
-    }
-
-    function resumeAuto(delay = false) {
-      clearAuto();
-      if (delay) delayTimer = setTimeout(startAuto, 1200);
-      else startAuto();
-    }
-
-    const prevBtn = wrap.querySelector('.car-prev');
-    const nextBtn = wrap.querySelector('.car-next');
-    const onPrev = () => {
-      go(-1);
-      resumeAuto(true);
-    };
-    const onNext = () => {
-      go(1);
-      resumeAuto(true);
-    };
-    const onEnter = () => clearAuto();
-    const onLeave = () => resumeAuto(false);
-    const onResize = () => render(true);
-
-    prevBtn.addEventListener('click', onPrev);
-    nextBtn.addEventListener('click', onNext);
-    wrap.addEventListener('mouseenter', onEnter);
-    wrap.addEventListener('mouseleave', onLeave);
-    window.addEventListener('resize', onResize);
-
-    const cards = [...track.children];
-    const handlers = cards.map((c) => {
-      const enter = () => {
-        cards.forEach((x) => x.classList.remove('active'));
-        c.classList.add('hovered');
-      };
-      const leave = () => {
-        c.classList.remove('hovered');
-        render(true);
-      };
-      c.addEventListener('mouseenter', enter);
-      c.addEventListener('mouseleave', leave);
-      return { c, enter, leave };
-    });
-
-    startAuto();
-    render(true);
-
-    return () => {
-      clearAuto();
-      prevBtn.removeEventListener('click', onPrev);
-      nextBtn.removeEventListener('click', onNext);
-      wrap.removeEventListener('mouseenter', onEnter);
-      wrap.removeEventListener('mouseleave', onLeave);
-      window.removeEventListener('resize', onResize);
-      handlers.forEach(({ c, enter, leave }) => {
-        c.removeEventListener('mouseenter', enter);
-        c.removeEventListener('mouseleave', leave);
-      });
-    };
-  }, [total, stories]);
-
-  const openStory = (story) => {
-    setActiveStory(story);
+  const onCardPointerDown = (e) => {
+    press.current = { x: e.clientX, y: e.clientY, moved: false };
   };
 
-  const loop = [...stories, ...stories, ...stories];
+  const onCardPointerMove = (e) => {
+    if (Math.abs(e.clientX - press.current.x) > 12 || Math.abs(e.clientY - press.current.y) > 12) {
+      press.current.moved = true;
+    }
+  };
+
+  const tryOpenStory = (story) => {
+    if (didDrag.current || press.current.moved) return;
+    openStory(story);
+  };
+
+  if (!total) return null;
+
+  const visible = [
+    stories[(idx - 1 + total) % total],
+    stories[idx],
+    stories[(idx + 1) % total],
+  ];
+
+  const viewAllModal = (
+    <div
+      className={`ap-modal${viewAllOpen ? ' open' : ''}`}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) setViewAllOpen(false);
+      }}
+    >
+      <div className="ap-modal-card" key={viewAllOpen ? 'view-all-open' : 'view-all'}>
+        <button
+          type="button"
+          className="modal-close"
+          aria-label="Close"
+          onClick={() => setViewAllOpen(false)}
+        >
+          ×
+        </button>
+        <h3>All Success Stories</h3>
+        <p className="lede">Browse every case study. Click any story to open full detail.</p>
+        <div className="ap-modal-grid">
+          {stories.map((s) => (
+            <button
+              type="button"
+              className="ap-modal-item story-pick"
+              key={s.id}
+              onClick={() => openStory(s)}
+            >
+              <div className="ap-modal-thumb" style={{ backgroundImage: `url('${s.image}')` }} />
+              <h4>{s.title}</h4>
+              <p>{s.description}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  const detailModal = (
+    <div
+      className={`ap-modal${activeStory ? ' open' : ''}`}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) setActiveStory(null);
+      }}
+    >
+      {activeStory && (
+        <div
+          className="ap-modal-card story-detail"
+          key={activeStory.id}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            type="button"
+            className="modal-close"
+            aria-label="Close"
+            onClick={() => setActiveStory(null)}
+          >
+            ×
+          </button>
+          <div
+            className="story-detail-hero"
+            style={{ backgroundImage: `url('${activeStory.image}')` }}
+          />
+          <span className="story-tag">{activeStory.tag}</span>
+          <h3>{activeStory.title}</h3>
+          <p className="lede">{activeStory.description}</p>
+
+          {activeStory.metrics?.length > 0 && (
+            <div className="story-metrics">
+              {activeStory.metrics.map((m) => (
+                <div key={`${m.value}-${m.label}`}>
+                  <strong>{m.value}</strong>
+                  <span>{m.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="story-meta-row">
+            <div>
+              <span className="mono">Industry</span>
+              <p>{activeStory.industry}</p>
+            </div>
+            <div>
+              <span className="mono">Duration</span>
+              <p>{activeStory.duration}</p>
+            </div>
+          </div>
+
+          <div className="story-block">
+            <h4>The Challenge</h4>
+            <p>{activeStory.challenge}</p>
+          </div>
+          <div className="story-block">
+            <h4>The Solution</h4>
+            <p>{activeStory.solution}</p>
+          </div>
+
+          {activeStory.implementation?.length > 0 && (
+            <div className="story-block">
+              <h4>Implementation Approach</h4>
+              <div className="impl-grid">
+                {activeStory.implementation.map((stepItem, i) => (
+                  <div key={stepItem.title}>
+                    <span className="mono">{i + 1}</span>
+                    <strong>{stepItem.title}</strong>
+                    <p>{stepItem.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeStory.stack && (
+            <div className="story-block">
+              <h4>Technical Stack</h4>
+              <div className="stack-grid">
+                {Object.entries(activeStory.stack).map(([group, items]) => (
+                  <div key={group}>
+                    <span className="mono">{group}</span>
+                    <div className="chips">
+                      {items.map((item) => (
+                        <span key={item}>{item}</span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {activeStory.achievements?.length > 0 && (
+            <div className="story-block">
+              <h4>Key Achievements</h4>
+              <ul className="check">
+                {activeStory.achievements.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <>
-      <section id="stories">
-        <div className="eyebrow">SUCCESS STORIES</div>
-        <div className="studios-header">
+      <section className="band screen" id="stories" data-reveal>
+        <header className="band-head row-head reveal-child" style={{ '--i': 0 }}>
           <div>
+            <p className="kicker">Success stories</p>
             <h2>Real problems, real solutions, real results</h2>
-            <p className="sub">
-              Real results from real clients. See how we have helped businesses transform their
-              operations and achieve remarkable growth.
-            </p>
+            <p className="lede">Click any story to open the full case study.</p>
           </div>
-          <button className="btn-outline" type="button" onClick={() => setViewAllOpen(true)}>
+          <button type="button" className="ghost" onClick={() => setViewAllOpen(true)}>
             View All
           </button>
-        </div>
-        <div className="carousel-wrap" id="storiesCarousel" ref={wrapRef}>
-          <button className="car-btn car-prev" type="button">
-            ‹
+        </header>
+
+        <div
+          className="story-deck reveal-child"
+          style={{ '--i': 1 }}
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          <button type="button" className="ghost ind-nav" onClick={() => step(-1)} aria-label="Previous">
+            <ChevronLeft />
           </button>
-          <div className="carousel-viewport">
-            <div className="carousel-track" ref={trackRef}>
-              {loop.map((s, i) => (
-                <button
-                  type="button"
-                  className="story car-item"
-                  data-story={s.id}
-                  key={`${s.id}-${i}`}
-                  onClick={() => openStory(s)}
+          <div className="story-viewport drag-swipe" ref={viewportRef}>
+            <div className={`story-strip slide-${dir > 0 ? 'next' : 'prev'}`} key={idx} ref={trackRef}>
+              {visible.map((s, pos) => (
+                <article
+                  key={`${s.id}-${pos}`}
+                  role="button"
+                  tabIndex={0}
+                  className={`story-card ${pos === 1 ? 'on' : ''}`}
+                  onPointerDown={onCardPointerDown}
+                  onPointerMove={onCardPointerMove}
+                  onPointerUp={() => tryOpenStory(s)}
+                  onClick={() => tryOpenStory(s)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      openStory(s);
+                    }
+                  }}
                 >
-                  <div className="story-body">
-                    <div className="story-tag">{s.tag}</div>
+                  <div className="story-card-media" style={{ backgroundImage: `url('${s.image}')` }} />
+                  <div className="story-card-body">
+                    <span className="story-tag">{s.tag}</span>
                     <h3>{s.title}</h3>
                     <p>{s.description}</p>
+                    <span className="story-open">Open case study →</span>
                   </div>
-                </button>
+                </article>
               ))}
             </div>
           </div>
-          <button className="car-btn car-next" type="button">
-            ›
+          <button type="button" className="ghost ind-nav" onClick={() => step(1)} aria-label="Next">
+            <ChevronRight />
           </button>
         </div>
       </section>
 
-      <div
-        className={`studios-modal${viewAllOpen ? ' open' : ''}`}
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setViewAllOpen(false);
-        }}
-      >
-        <div className="studios-modal-card">
-          <button
-            className="modal-close"
-            type="button"
-            aria-label="Close"
-            onClick={() => setViewAllOpen(false)}
-          >
-            ×
-          </button>
-          <h3>All Success Stories</h3>
-          <p className="sub" style={{ textAlign: 'left', margin: '8px 0 0', maxWidth: '100%' }}>
-            Browse every case study. Click any story to open the full project detail.
-          </p>
-          <div className="studios-modal-grid">
-            {stories.map((s) => (
-              <button
-                type="button"
-                className="studios-modal-item story-modal-item"
-                key={s.id}
-                onClick={() => openStory(s)}
-              >
-                <div
-                  className="studios-modal-thumb"
-                  style={{ backgroundImage: `url('${s.image}')` }}
-                />
-                <h4>{s.title}</h4>
-                <p>{s.description}</p>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div
-        className={`studios-modal story-detail-modal${activeStory ? ' open' : ''}`}
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setActiveStory(null);
-        }}
-      >
-        {activeStory && (
-          <div className="studios-modal-card story-detail-card">
-            <button
-              className="modal-close"
-              type="button"
-              aria-label="Close"
-              onClick={() => setActiveStory(null)}
-            >
-              ×
-            </button>
-
-            <div
-              className="story-detail-hero"
-              style={{ backgroundImage: `url('${activeStory.image}')` }}
-            />
-
-            <div className="story-tag">{activeStory.tag}</div>
-            <h3>{activeStory.title}</h3>
-            <p className="story-detail-summary">{activeStory.description}</p>
-
-            {activeStory.metrics?.length > 0 && (
-              <div className="story-detail-metrics">
-                {activeStory.metrics.map((m) => (
-                  <div className="story-metric" key={`${m.value}-${m.label}`}>
-                    <div className="story-metric-value">{m.value}</div>
-                    <div className="story-metric-label">{m.label}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-
-            <div className="story-detail-meta">
-              <div>
-                <div className="story-meta-label">Industry</div>
-                <div>{activeStory.industry}</div>
-              </div>
-              <div>
-                <div className="story-meta-label">Duration</div>
-                <div>{activeStory.duration}</div>
-              </div>
-            </div>
-
-            <div className="story-detail-section">
-              <h4>The Challenge</h4>
-              <p>{activeStory.challenge}</p>
-            </div>
-
-            <div className="story-detail-section">
-              <h4>The Solution</h4>
-              <p>{activeStory.solution}</p>
-            </div>
-
-            {activeStory.implementation?.length > 0 && (
-              <div className="story-detail-section">
-                <h4>Implementation Approach</h4>
-                <div className="story-impl-grid">
-                  {activeStory.implementation.map((step, idx) => (
-                    <div className="story-impl-item" key={step.title}>
-                      <div className="story-impl-num">{idx + 1}</div>
-                      <div>
-                        <strong>{step.title}</strong>
-                        <p>{step.text}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {activeStory.stack && Object.keys(activeStory.stack).length > 0 && (
-              <div className="story-detail-section">
-                <h4>Technical Stack</h4>
-                <div className="story-stack-grid">
-                  {Object.entries(activeStory.stack).map(([group, items]) => (
-                    <div className="story-stack-group" key={group}>
-                      <div className="story-meta-label">{group}</div>
-                      <div className="story-stack-chips">
-                        {items.map((item) => (
-                          <span key={item}>{item}</span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {activeStory.achievements?.length > 0 && (
-              <div className="story-detail-section">
-                <h4>Key Achievements</h4>
-                <ul className="story-achievements">
-                  {activeStory.achievements.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+      {mounted ? createPortal(viewAllModal, document.body) : null}
+      {mounted ? createPortal(detailModal, document.body) : null}
     </>
   );
 }

@@ -1,21 +1,69 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import useDragScroll from '@/components/useDragScroll';
+
 export default function Packages({ packages = [] }) {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const { ref: railRef } = useDragScroll();
+
+  useEffect(() => {
+    if (!packages.length || paused) return undefined;
+    const id = window.setInterval(() => {
+      setActive((i) => {
+        const next = (i + 1) % packages.length;
+        const rail = railRef.current;
+        const child = rail?.children?.[next];
+        if (rail && child) {
+          const left = child.offsetLeft - (rail.clientWidth - child.offsetWidth) / 2;
+          rail.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+        }
+        return next;
+      });
+    }, 4200);
+    return () => window.clearInterval(id);
+  }, [packages.length, paused, railRef]);
+
   return (
-    <section id="packages">
-      <div className="eyebrow">PACKAGES</div>
-      <h2>What you&apos;ll get — not just what we do</h2>
-      <div className="grid3">
-        {packages.map((pkg) => (
-          <div className={`pkg${pkg.highlight ? ' highlight' : ''}`} key={pkg.name}>
-            {pkg.badge ? <div className="badge2">{pkg.badge}</div> : null}
+    <section
+      className="band screen packages-section"
+      id="packages"
+      data-reveal
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      <header className="band-head reveal-child" style={{ '--i': 0 }}>
+        <p className="kicker">Packages</p>
+        <h2>Engagement models that scale with you</h2>
+      </header>
+      <div className="pack-rail reveal-child drag-rail" style={{ '--i': 1 }} ref={railRef}>
+        {packages.map((pkg, i) => (
+          <article
+            key={pkg.name}
+            className={`pack tilt ${pkg.highlight ? 'hot' : ''} ${active === i ? 'pack-live' : ''}`}
+            onMouseEnter={() => setActive(i)}
+          >
+            <div className="pack-glow" aria-hidden="true" />
+            {pkg.badge && <span className="hot-flag bounce-soft">{pkg.badge}</span>}
+            <span className="pack-audience">{pkg.audience}</span>
             <h3>{pkg.name}</h3>
-            <div className="desc">{pkg.desc}</div>
-            <hr className="div" />
-            <ul className="check">
-              {pkg.items.map((item) => (
-                <li key={item}>{item}</li>
+            <div className="pack-price">
+              <strong>{pkg.price}</strong>
+              <span>{pkg.priceNote}</span>
+            </div>
+            <p>{pkg.desc}</p>
+            <ul>
+              {pkg.items.map((item, j) => (
+                <li key={item} style={{ '--j': j }}>
+                  {item}
+                </li>
               ))}
             </ul>
-          </div>
+            <a href="#contact" className="ghost">
+              Discuss this package
+            </a>
+          </article>
         ))}
       </div>
     </section>

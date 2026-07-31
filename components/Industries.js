@@ -3,125 +3,86 @@
 import { useEffect, useState } from 'react';
 
 export default function Industries({ industries = [] }) {
-  const [idx, setIdx] = useState(0);
   const [open, setOpen] = useState(false);
-  const [paused, setPaused] = useState(false);
-  const total = industries.length;
+  const featured = industries.slice(0, 10);
 
   useEffect(() => {
-    if (!total || paused) return undefined;
-
-    const timer = setInterval(() => {
-      setIdx((i) => (i + 1) % total);
-    }, 2000);
-
-    return () => clearInterval(timer);
-  }, [total, paused]);
-
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === 'Escape') setOpen(false);
+    const onKey = (event) => {
+      if (event.key === 'Escape') setOpen(false);
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
-  function go(dir) {
-    if (!total) return;
-    setIdx((i) => (i + dir + total) % total);
-  }
+  if (!industries.length) return null;
 
   return (
     <>
-      <section id="help">
-        <div className="eyebrow">WHO WE HELP</div>
-        <div className="studios-header">
+      <section className="band screen industries-impact" id="help" data-reveal>
+        <header className="band-head row-head industries-impact-head">
           <div>
+            <p className="kicker">Who we help</p>
             <h2>Industries we serve</h2>
-            <p className="sub">
-              If your organization runs on complex data or critical operations, chances are we
-              already work in your field.
+            <p className="lede">
+              If your organization runs on complex data or critical operations, we likely already
+              work in your field.
             </p>
           </div>
-          <button className="btn-outline" type="button" onClick={() => setOpen(true)}>
-            View All
-          </button>
+        </header>
+
+        <div className="industries-impact-grid reveal-child" style={{ '--i': 1 }}>
+          {featured.map((industry, index) => (
+            <article className="industries-impact-row" key={industry.name}>
+              <span
+                className="industries-impact-icon"
+                style={{ backgroundImage: `url('${industry.image}')` }}
+                aria-hidden="true"
+              />
+              <div>
+                <span className="industries-impact-number">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <h3>{industry.name}</h3>
+              </div>
+              <span className="industries-impact-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </article>
+          ))}
         </div>
 
-        <div
-          className="ind-slideshow"
-          id="indSlideshow"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          <button className="car-btn ind-prev" type="button" onClick={() => go(-1)}>
-            ‹
+        <div className="industries-impact-footer reveal-child" style={{ '--i': 2 }}>
+          <span>{industries.length} industries. One delivery standard.</span>
+          <button type="button" className="ghost" onClick={() => setOpen(true)}>
+            Explore all industries
           </button>
-          <div className="ind-slide-viewport">
-            <div
-              className="ind-slide-track"
-              id="indSlideTrack"
-              style={{ transform: `translateX(-${idx * 100}%)` }}
-            >
-              {industries.map((ind) => (
-                <div
-                  className={`ind-slide${ind.image ? ' has-bg' : ''}`}
-                  key={ind.name}
-                  style={ind.image ? { backgroundImage: `url("${ind.image}")` } : undefined}
-                >
-                  <div className="ind-slide-text">
-                    <h4>{ind.name}</h4>
-                    <p>{ind.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <button className="car-btn ind-next" type="button" onClick={() => go(1)}>
-            ›
-          </button>
-        </div>
-        <div className="ind-dots" id="indDots">
-          {industries.map((ind, i) => (
-            <div
-              className={`ind-dot${i === idx ? ' active' : ''}`}
-              key={ind.name}
-              onClick={() => setIdx(i)}
-            />
-          ))}
         </div>
       </section>
 
       <div
-        className={`studios-modal${open ? ' open' : ''}`}
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setOpen(false);
+        className={`ap-modal${open ? ' open' : ''}`}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) setOpen(false);
         }}
       >
-        <div className="studios-modal-card">
-          <button
-            className="modal-close"
-            type="button"
-            aria-label="Close"
-            onClick={() => setOpen(false)}
-          >
+        <div className="ap-modal-card" key={open ? 'industries-open' : 'industries'}>
+          <button type="button" className="modal-close" aria-label="Close" onClick={() => setOpen(false)}>
             ×
           </button>
           <h3>All Industries We Serve</h3>
-          <p className="sub" style={{ textAlign: 'left', margin: '8px 0 0', maxWidth: '100%' }}>
-            Organizations across sectors rely on Nexbash for AI, geospatial, and software systems
-            built for complex operations.
+          <p className="lede">
+            Organizations across sectors rely on Nexbash for AI, geospatial, and software systems.
           </p>
-          <div className="industries-modal-grid">
-            {industries.map((ind) => (
-              <div className="industries-modal-item" key={ind.name}>
+          <div className="ap-modal-grid">
+            {industries.map((industry) => (
+              <article className="ap-modal-item" key={industry.name}>
                 <div
-                  className="industries-modal-thumb"
-                  style={ind.image ? { backgroundImage: `url('${ind.image}')` } : undefined}
+                  className="ap-modal-thumb"
+                  style={industry.image ? { backgroundImage: `url('${industry.image}')` } : undefined}
                 />
-                <h4>{ind.name}</h4>
-                <p>{ind.desc}</p>
-              </div>
+                <h4>{industry.name}</h4>
+                <p>{industry.desc}</p>
+              </article>
             ))}
           </div>
         </div>

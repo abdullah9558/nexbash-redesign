@@ -1,75 +1,95 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useTheme } from './ThemeProvider';
+import BrandLogo from '@/components/BrandLogo';
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const menus = [
+  {
+    label: 'What We Do',
+    items: [
+      ['GIS Services', ['Web Mapping', 'GIS Automation', 'Geospatial Analysis', 'GIS Software Development']],
+      ['Custom Software', ['Frontend', 'Backend', 'Databases', 'API Development']],
+      ['Mobile Development', ['iOS Development', 'Android Development', 'Hybrid App Development']],
+      ['Offshore Teams', ['Dedicated Teams', 'Team Augmentation', 'Consultation', 'Software Development']],
+      ['Web Services', ['Websites', 'Web Applications', 'Frontend & Backend', 'Web GIS Development']],
+      ['UI & UX Design', ['Web Design', 'Branding', 'User Experience', 'Interface Design']],
+    ],
+  },
+  {
+    label: 'Who We Help',
+    items: [
+      ['Metaverse', ['Point Clouds', '3D Meshes', 'Virtual Reality', 'LiDAR']],
+      ['Agriculture', ['Precision Agriculture', 'Crop Simulation', 'Remote Sensing', 'Yield Forecasting']],
+      ['Telecommunication', ['FTTH', 'FTTX', 'Capacity Management', 'Demand Forecasting']],
+      ['Real Estate', ['3D Modeling', 'Land Records', 'Market Analysis', 'Property Platforms']],
+      ['Healthcare', ['EMR / EHR', 'Patient Portals', 'Data Analytics', 'Remote Diagnostics']],
+    ],
+  },
+  {
+    label: 'How We Deliver',
+    items: [
+      ['Discover', ['Requirements', 'Research', 'Product Strategy']],
+      ['Design', ['Architecture', 'UX Systems', 'Prototyping']],
+      ['Develop', ['Agile Delivery', 'Engineering', 'Quality Assurance']],
+      ['Deliver', ['Deployment', 'Integration', 'Maintenance & Support']],
+    ],
+  },
+];
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const [solid, setSolid] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 6);
+    const onScroll = () => setSolid(window.scrollY > 40);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const useWhiteLogo = !scrolled || theme === 'dark';
+  const closeNav = () => setOpen(false);
 
   return (
-    <nav className={scrolled ? 'scrolled' : ''}>
+    <header className={`topnav ${solid ? 'is-solid' : ''}`}>
       <a href="#top" className="brand">
-        <img
-          src={useWhiteLogo ? '/assets/nexbash-logo-white.png' : '/assets/nexbash-logo.png'}
-          alt="Nexbash Systems"
-          className="brand-logo"
-        />
+        <BrandLogo src={solid ? '/assets/nexbash-logo.png' : '/assets/nexbash-logo-white.png'} />
       </a>
-      <div className="navlinks">
-        <a href="#studios">Studios</a>
-        <a href="#packages">Packages</a>
-        <a href="#process">Process</a>
-        <a href="#projects">Projects</a>
-        <a href="#help">Who We Help</a>
-        <a href="#contact">Contact</a>
-      </div>
-      <div className="nav-actions">
-        <button
-          type="button"
-          className="theme-toggle"
-          onClick={toggleTheme}
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          title={theme === 'dark' ? 'Light mode' : 'Dark mode'}
-        >
-          {theme === 'dark' ? (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
-              <path
-                d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            </svg>
-          ) : (
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M21 14.5A8.5 8.5 0 1 1 9.5 3a7 7 0 0 0 11.5 11.5z"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinejoin="round"
-              />
-            </svg>
-          )}
-        </button>
-        <a href="#contact" className="btn">
-          Get Started
-        </a>
-      </div>
-    </nav>
+      <nav className={open ? 'open' : ''}>
+        {menus.map((menu) => (
+          <div className="nav-menu" key={menu.label}>
+            <span className="nav-menu-label">{menu.label}</span>
+            <div className="nav-dropdown">
+              {menu.items.map(([label, children]) => (
+                <div className="nav-submenu" key={label}>
+                  <a href={menu.label === 'What We Do' ? '#studios' : menu.label === 'Who We Help' ? '#help' : '#process'} onClick={closeNav}>
+                  <span>{label}</span>
+                  <span aria-hidden="true">-&gt;</span>
+                  </a>
+                  <div className="nav-submenu-panel">
+                    <strong>{label}</strong>
+                    {children.map((child) => <span key={child}>{child}</span>)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+        <a href="#packages" onClick={closeNav}>Packages</a>
+        <a href="#contact" onClick={closeNav}>Contact</a>
+      </nav>
+      <a href="#contact" className="go">
+        Get Started
+      </a>
+      <button
+        type="button"
+        className="nav-burger"
+        aria-label="Menu"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span />
+        <span />
+      </button>
+    </header>
   );
 }
-
-export { API };

@@ -1,31 +1,23 @@
 import './globals.css';
-import { ThemeProvider } from '@/components/ThemeProvider';
 
 export const metadata = {
-  title: 'NexBash — Enterprise Intelligence',
+  title: 'NexBash — Aperture',
   description:
-    'Enterprise AI, geospatial, and software engineering for organizations managing critical infrastructure and large-scale operations.',
+    'Enterprise AI, geospatial, and software engineering for organizations managing critical infrastructure.',
 };
-
-const themeBootScript = `
-(function () {
-  try {
-    var saved = localStorage.getItem('nexbash-theme');
-    var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
-  } catch (e) {}
-})();
-`;
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" style={{ scrollBehavior: 'smooth' }} suppressHydrationWarning>
+    <html lang="en" data-theme="light">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Unbounded:wght@500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
       </head>
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

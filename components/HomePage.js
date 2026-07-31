@@ -1,56 +1,46 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Nav, { API } from '@/components/Nav';
-import Glow from '@/components/Glow';
+import Bloom from '@/components/Bloom';
+import GeoField from '@/components/GeoField';
+import MotionRoot from '@/components/MotionRoot';
+import Nav from '@/components/Nav';
 import Hero from '@/components/Hero';
-import Studios from '@/components/Studios';
-import Projects, { Capabilities } from '@/components/Projects';
+import Institutions from '@/components/Institutions';
+import Spectrum from '@/components/Spectrum';
+import Shatter from '@/components/Shatter';
 import Packages from '@/components/Packages';
 import Industries from '@/components/Industries';
+import Lens from '@/components/Lens';
 import Stories from '@/components/Stories';
-import Process from '@/components/Process';
+import Path from '@/components/Path';
 import FAQ from '@/components/FAQ';
-import TrustedBy from '@/components/TrustedBy';
+import Partners from '@/components/Partners';
+import Certifications from '@/components/Certifications';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 
-export default function HomePage({ initialData }) {
-  const [data, setData] = useState(initialData);
-
-  useEffect(() => {
-    if (initialData) return;
-    fetch(`${API}/api/site`)
-      .then((r) => r.json())
-      .then(setData)
-      .catch(() => {});
-  }, [initialData]);
-
-  if (!data) {
-    return (
-      <>
-        <Glow />
-        <Nav />
-        <main style={{ padding: '160px 24px', textAlign: 'center' }}>Loading…</main>
-      </>
-    );
-  }
-
+export default function HomePage({ site }) {
   return (
     <>
-      <Glow />
+      <GeoField />
+      <Bloom />
+      <MotionRoot />
       <Nav />
-      <Hero heroBar={data.heroBar} />
-      <Studios studios={data.studios} />
-      <Projects projects={data.projects} />
-      <Packages packages={data.packages} />
-      <Industries industries={data.industries} />
-      <Capabilities capabilities={data.capabilities} />
-      <Stories stories={data.stories} />
-      <Process process={data.process} />
-      <FAQ faq={data.faq} />
-      <TrustedBy partners={data.partners} />
-      <Contact />
+      <main>
+        <Hero heroBar={site.heroBar} />
+        <Institutions />
+        <Spectrum studios={site.studios} />
+        <Industries industries={site.industries} />
+        <Shatter projects={site.projects} />
+        <Packages packages={site.packages} />
+        <Lens capabilities={site.capabilities} />
+        <Stories stories={site.stories} />
+        <Path process={site.process} />
+        <FAQ faq={site.faq} />
+        <Partners partners={site.partners} />
+        <Certifications />
+        <Contact />
+      </main>
       <Footer />
     </>
   );
