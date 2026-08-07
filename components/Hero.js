@@ -1,6 +1,5 @@
 'use client';
 
-import BrandLogo from '@/components/BrandLogo';
 import HeroExperience from '@/components/HeroExperience';
 
 export default function Hero({ heroBar = [] }) {
@@ -8,17 +7,15 @@ export default function Hero({ heroBar = [] }) {
     <section className="hero screen" id="top">
       <HeroExperience />
 
-      <div className="hero-main hero-main-centered">
-        <div className="hero-copy">
-          <BrandLogo className="hero-mark anim-fade logo-pulse" />
-          <p className="signal anim-fade">
-            Signal · Geospatial · Intelligence
-            <span className="signal-live" aria-hidden="true" />
+      <div className="hero-main hero-main-award">
+        <div className="hero-copy hero-copy-award">
+          <p className="hero-trust anim-fade">
+            Trusted by organizations operating <strong>at scale</strong>
           </p>
-          <div className="hero-text-panel">
+          <div className="hero-text-award">
             <h1 className="anim-fade hero-title">
-              Turning complex data into{' '}
-              <span className="word-dance">operational advantage</span>
+              Turning complex data into
+              <span> operational advantage</span>
             </h1>
             <p className="hero-sub anim-fade">
               Enterprise AI, geospatial, and software engineering for organizations managing critical
@@ -28,9 +25,6 @@ export default function Hero({ heroBar = [] }) {
           <div className="hero-row anim-fade">
             <a href="#contact" className="go go-pulse">
               Start a Project
-            </a>
-            <a href="#projects" className="ghost">
-              See Our Work
             </a>
           </div>
         </div>
