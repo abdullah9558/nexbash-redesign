@@ -8,7 +8,7 @@ export default function Hero({ heroBar = [] }) {
     <section className="hero screen" id="top">
       <HeroExperience />
 
-      <div className="hero-main">
+      <div className="hero-main hero-main-centered">
         <div className="hero-copy">
           <BrandLogo className="hero-mark anim-fade logo-pulse" />
           <p className="signal anim-fade">

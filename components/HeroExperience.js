@@ -1,10 +1,29 @@
 'use client';
 
-import { useRef } from 'react';
-import HeroWorld from '@/components/HeroWorld';
+import { useEffect, useRef } from 'react';
 
 export default function HeroExperience() {
   const experienceRef = useRef(null);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return undefined;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    const play = () => video.play().catch(() => {});
+    const resume = () => {
+      if (!document.hidden && video.paused) play();
+    };
+    play();
+    video.addEventListener('canplay', play);
+    document.addEventListener('visibilitychange', resume);
+    return () => {
+      video.removeEventListener('canplay', play);
+      document.removeEventListener('visibilitychange', resume);
+    };
+  }, []);
 
   const onPointerMove = (event) => {
     const node = experienceRef.current;
@@ -29,15 +48,18 @@ export default function HeroExperience() {
       onPointerLeave={resetPointer}
       aria-label="Interactive Nexbash global technology experience"
     >
-      <img
+      <video
         className="hero-experience-video"
-        src="/assets/hero-bg-minimal.png"
-        alt=""
+        ref={videoRef}
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
         aria-hidden="true"
-      />
-      <div className="hero-experience-globe">
-        <HeroWorld />
-      </div>
+      >
+        <source src="/assets/hero-bg-video.mp4" type="video/mp4" />
+      </video>
     </div>
   );
 }
