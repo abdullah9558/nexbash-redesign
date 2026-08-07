@@ -14,8 +14,8 @@ export default function Hero({ heroBar = [] }) {
           </p>
           <div className="hero-text-award">
             <h1 className="anim-fade hero-title">
-              Turning complex data into
-              <span> operational advantage</span>
+              <span className="hero-title-line">Turning complex data into</span>
+              <span className="hero-title-line hero-title-muted">operational advantage</span>
             </h1>
             <p className="hero-sub anim-fade">
               Enterprise AI, geospatial, and software engineering for organizations managing critical

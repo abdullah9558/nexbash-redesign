@@ -5907,14 +5907,21 @@ body {
   margin: 0 auto clamp(0.9rem, 1.8vh, 1.4rem);
   color: #fff;
   font-size: clamp(2.8rem, 5.25vw, 5.7rem);
+  font-family: var(--body);
   font-weight: 800;
-  line-height: 0.98;
-  letter-spacing: -0.05em;
+  line-height: 0.96;
+  letter-spacing: -0.045em;
   text-align: center;
 }
 
-.hero-text-award .hero-title span {
+.hero-text-award .hero-title-line {
   display: block;
+  white-space: nowrap;
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+}
+
+.hero-text-award .hero-title .hero-title-muted {
   color: rgba(224, 229, 240, 0.72);
   -webkit-text-fill-color: rgba(224, 229, 240, 0.72);
 }
@@ -5958,8 +5965,9 @@ body {
   }
 
   .hero-text-award .hero-title {
-    max-width: 12ch;
-    font-size: clamp(2.35rem, 11.5vw, 3.8rem);
+    max-width: none;
+    font-size: clamp(1.55rem, 6.4vw, 2.1rem);
+    letter-spacing: -0.035em;
   }
 }
 
