@@ -1,6 +1,11 @@
+'use client';
+
 import Link from 'next/link';
+import useDragScroll from '@/components/useDragScroll';
 
 export default function Spectrum({ studios = [] }) {
+  const { ref: railRef, didDrag } = useDragScroll();
+
   if (!studios.length) return null;
 
   return (
@@ -12,9 +17,19 @@ export default function Spectrum({ studios = [] }) {
           <p className="lede">Each studio is a full delivery team. Tune a band, or open the full rack.</p>
         </div>
       </header>
-      <div className="studio-service-grid">
+      <div className="studio-service-grid" ref={railRef}>
         {studios.map((studio) => (
-          <Link className="studio-service-card" key={studio.id} href={`/studios/${studio.id}`}>
+          <Link
+            className="studio-service-card"
+            key={studio.id}
+            href={`/studios/${studio.id}`}
+            onClick={(event) => {
+              if (didDrag.current) {
+                event.preventDefault();
+                didDrag.current = false;
+              }
+            }}
+          >
             <img src={studio.image} alt="" />
             <div className="studio-service-shade" />
             <div className="studio-service-copy"><h3>{studio.title}</h3><p>{studio.modalDesc}</p></div>

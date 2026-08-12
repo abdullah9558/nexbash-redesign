@@ -20,8 +20,10 @@ export default function useDragSlide(onStep, { threshold = 64 } = {}) {
     let active = false;
     let dragging = false;
     let startX = 0;
+    let startY = 0;
     let lastDx = 0;
     let pid = null;
+    let axis = null;
     const DRAG_START = 14;
 
     const track = () => trackRef.current;
@@ -48,8 +50,16 @@ export default function useDragSlide(onStep, { threshold = 64 } = {}) {
       if (!active) return;
       if (pid != null && e.pointerId !== pid) return;
       const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
       lastDx = dx;
-      if (!dragging && Math.abs(dx) < DRAG_START) return;
+      if (!axis && Math.max(Math.abs(dx), Math.abs(dy)) < DRAG_START) return;
+      if (!axis) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (axis === 'y') {
+        active = false;
+        pid = null;
+        cleanupWindow();
+        return;
+      }
       if (!dragging) {
         dragging = true;
         didDrag.current = true;
@@ -71,6 +81,7 @@ export default function useDragSlide(onStep, { threshold = 64 } = {}) {
       active = false;
       pid = null;
       dragging = false;
+      axis = null;
       lastDx = 0;
       cleanupWindow();
 
@@ -106,8 +117,10 @@ export default function useDragSlide(onStep, { threshold = 64 } = {}) {
       dragging = false;
       didDrag.current = false;
       startX = e.clientX;
+      startY = e.clientY;
       lastDx = 0;
       pid = e.pointerId;
+      axis = null;
       window.addEventListener('pointermove', move, { passive: false });
       window.addEventListener('pointerup', up);
       window.addEventListener('pointercancel', up);

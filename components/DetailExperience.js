@@ -33,7 +33,11 @@ export default function DetailExperience({ data }) {
         <div className="long-detail-panel" key={panel.id}><p className="long-detail-panel-intro">{panel.intro}</p><div className="long-detail-blocks">{panel.blocks.map((block) => <article key={block.title}><h2>{block.title}</h2><p>{block.text}</p>{block.items?.length > 0 && <ul>{block.items.map((item) => <li key={item}>{item}</li>)}</ul>}</article>)}</div></div>
       </section>
 
-      <section className="long-detail-gallery"><div><img src={data.image} alt="" /></div><div><img src={data.image} alt="" /></div><div><img src={data.image} alt="" /></div></section>
+      <section className="long-detail-gallery">
+        {(data.gallery?.length ? data.gallery : [data.image, data.image, data.image]).map((image, index) => (
+          <div key={`${image}-${index}`}><img src={image} alt="" /></div>
+        ))}
+      </section>
 
       {data.steps?.length > 0 && <section className="long-detail-timeline"><p className="kicker">{data.deliveryEyebrow}</p><h2>{data.deliveryTitle}</h2><div>{data.steps.map((step, index) => <article key={`${step.title}-${index}`}><span>{String(index + 1).padStart(2, '0')}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}</div></section>}
 

@@ -75,29 +75,30 @@ export default function Lens({ capabilities = [] }) {
         <div className="capability-console-glow" />
         <div className="capability-index">
           {capabilities.map((item, index) => (
-            <Link
+            <button
+              type="button"
               key={item.id}
               className={index === active ? 'on' : ''}
-              href={`/capabilities/${item.id}`}
               onMouseEnter={() => setActive(index)}
               onFocus={() => setActive(index)}
+              onClick={() => setActive(index)}
             >
               <span>{String(index + 1).padStart(2, '0')}</span>
               {item.name}
-            </Link>
+            </button>
           ))}
         </div>
 
-        <div className="capability-hologram" key={`visual-${capability.id}`}>
+        <Link className="capability-hologram" key={`visual-${capability.id}`} href={`/capabilities/${capability.id}`}>
           <div className="capability-orbit orbit-a" />
           <div className="capability-orbit orbit-b" />
           <div className="capability-scan" />
           <img src={image} alt="" />
           <span className="capability-live">LIVE SIGNAL</span>
-        </div>
+        </Link>
 
         <div className="capability-readout" key={`copy-${capability.id}`}>
-          <h3>{capability.name}</h3>
+          <h3><Link href={`/capabilities/${capability.id}`}>{capability.name}</Link></h3>
           <p>{capability.desc}</p>
           <div className="capability-meter">
             <span style={{ width: `${68 + active * 4}%` }} />

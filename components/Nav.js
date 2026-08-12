@@ -39,6 +39,8 @@ const menus = [
 export default function Nav({ forceSolid = false }) {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const [expandedMenu, setExpandedMenu] = useState(null);
+  const [expandedSubmenu, setExpandedSubmenu] = useState(null);
 
   useEffect(() => {
     const onScroll = () => setSolid(window.scrollY > 40);
@@ -47,25 +49,53 @@ export default function Nav({ forceSolid = false }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const closeNav = () => setOpen(false);
+  const closeNav = () => {
+    setOpen(false);
+    setExpandedMenu(null);
+    setExpandedSubmenu(null);
+  };
 
   const effectiveSolid = forceSolid || solid;
 
   return (
-    <header className={`topnav ${effectiveSolid ? 'is-solid' : ''}`}>
+    <>
+      <header className={`topnav ${effectiveSolid ? 'is-solid' : ''}`}>
       <a href="/#top" className="brand">
-        <BrandLogo src={effectiveSolid ? '/assets/nexbash-logo.png' : '/assets/nexbash-logo-white.png'} />
+        <BrandLogo src="/assets/nexbash-logo.png" />
       </a>
       <nav className={open ? 'open' : ''}>
         {menus.map((menu) => (
-          <div className="nav-menu" key={menu.label}>
-            <span className="nav-menu-label">{menu.label}</span>
+          <div className={`nav-menu ${expandedMenu === menu.label ? 'is-open' : ''}`} key={menu.label}>
+            <button
+              type="button"
+              className="nav-menu-label"
+              aria-expanded={expandedMenu === menu.label}
+              onClick={() => {
+                setExpandedMenu((current) => current === menu.label ? null : menu.label);
+                setExpandedSubmenu(null);
+              }}
+            >
+              <span>{menu.label}</span>
+              <span className="nav-group-chevron" aria-hidden="true">⌄</span>
+            </button>
             <div className="nav-dropdown">
               {menu.items.map(([label, children]) => (
-                <div className="nav-submenu" key={label}>
-                  <a href={menu.label === 'What We Do' ? '/#studios' : menu.label === 'Who We Help' ? '/#help' : '/#process'} onClick={closeNav}>
+                <div className={`nav-submenu ${expandedSubmenu === `${menu.label}-${label}` ? 'is-open' : ''}`} key={label}>
+                  <a
+                    href={menu.label === 'What We Do' ? '/#studios' : menu.label === 'Who We Help' ? '/#help' : '/#process'}
+                    onClick={(event) => {
+                      if (window.matchMedia('(max-width: 767px)').matches) {
+                        event.preventDefault();
+                        const key = `${menu.label}-${label}`;
+                        setExpandedSubmenu((current) => current === key ? null : key);
+                      } else {
+                        closeNav();
+                      }
+                    }}
+                    aria-expanded={expandedSubmenu === `${menu.label}-${label}`}
+                  >
                   <span>{label}</span>
-                  <span aria-hidden="true">-&gt;</span>
+                  <span className="nav-chevron" aria-hidden="true">›</span>
                   </a>
                   <div className="nav-submenu-panel">
                     <strong>{label}</strong>
@@ -84,14 +114,28 @@ export default function Nav({ forceSolid = false }) {
       </a>
       <button
         type="button"
-        className="nav-burger"
+        className={`nav-burger ${open ? 'is-open' : ''}`}
         aria-label="Menu"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
       >
-        <span />
-        <span />
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          {open ? (
+            <path d="M6 6l12 12M18 6L6 18" />
+          ) : (
+            <path d="M5 7h14M5 12h14M5 17h14" />
+          )}
+        </svg>
       </button>
-    </header>
+      </header>
+      {open && (
+        <button
+          type="button"
+          className="nav-backdrop"
+          aria-label="Close menu"
+          onClick={closeNav}
+        />
+      )}
+    </>
   );
 }

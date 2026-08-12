@@ -14,8 +14,10 @@ export default function useDragScroll() {
     let active = false;
     let dragging = false;
     let startX = 0;
+    let startY = 0;
     let startScroll = 0;
     let pid = null;
+    let axis = null;
     const THRESHOLD = 4;
 
     const down = (e) => {
@@ -24,15 +26,24 @@ export default function useDragScroll() {
       dragging = false;
       didDrag.current = false;
       startX = e.clientX;
+      startY = e.clientY;
       startScroll = el.scrollLeft;
       pid = e.pointerId;
+      axis = null;
     };
 
     const move = (e) => {
       if (!active) return;
       if (pid != null && e.pointerId !== pid) return;
       const dx = e.clientX - startX;
-      if (!dragging && Math.abs(dx) < THRESHOLD) return;
+      const dy = e.clientY - startY;
+      if (!axis && Math.max(Math.abs(dx), Math.abs(dy)) < THRESHOLD) return;
+      if (!axis) axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+      if (axis === 'y') {
+        active = false;
+        pid = null;
+        return;
+      }
       if (!dragging) {
         dragging = true;
         didDrag.current = true;
@@ -52,6 +63,7 @@ export default function useDragScroll() {
       if (e && pid != null && e.pointerId !== pid) return;
       active = false;
       pid = null;
+      axis = null;
       if (dragging) {
         el.classList.remove('is-dragging');
         const block = (ev) => {
