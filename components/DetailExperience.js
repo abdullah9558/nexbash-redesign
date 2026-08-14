@@ -15,7 +15,7 @@ export default function DetailExperience({ data }) {
     <GeoField className="detail-geo" />
     <Bloom />
     <Nav forceSolid />
-    <main className="long-detail-page" id="top">
+    <main className={`long-detail-page${data.type === 'Nexbash Studio' ? ' studio-detail-page' : ''}`} id="top">
       <header className="long-detail-hero">
         <div className="long-detail-copy">
           <p className="kicker">{data.type}</p><h1>{data.title}</h1><p>{data.intro}</p>

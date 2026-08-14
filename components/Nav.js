@@ -76,7 +76,9 @@ export default function Nav({ forceSolid = false }) {
               }}
             >
               <span>{menu.label}</span>
-              <span className="nav-group-chevron" aria-hidden="true">⌄</span>
+              <span className="nav-group-chevron" aria-hidden="true">
+                <svg viewBox="0 0 12 8"><path d="M1 1.25 6 6.25 11 1.25" /></svg>
+              </span>
             </button>
             <div className="nav-dropdown">
               {menu.items.map(([label, children]) => (
