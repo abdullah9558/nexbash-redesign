@@ -214,11 +214,11 @@ const site = {
   ],
 
   industries: [
-    { name: 'Startups & Founders', desc: 'Launch-ready platforms, investor decks, and founder-led product systems.', image: '/assets/startupsFounders.png' },
-    { name: 'Healthcare & Clinical Diagnostics', desc: 'Patient portals, diagnostics support, and secure clinical data systems.', image: '/assets/healthcare.png' },
-    { name: 'Public Sector & Government', desc: 'Citizen portals, internal tools, and modernized legacy systems.', image: '/assets/government.png' },
-    { name: 'Utilities & Public Works', desc: 'Asset monitoring, GIS mapping, and infrastructure management systems.', image: '/assets/utility.png' },
-    { name: 'Urban Planning & Smart Cities', desc: 'Digital twins and spatial analytics for city-scale planning.', image: '/assets/urbanPlanning.png' },
+    { name: 'Startups & Founders', desc: 'Launch-ready platforms, investor decks, and founder-led product systems.', image: '/assets/industries/startups-founders/main.jpg', gallery: ['/assets/industries/startups-founders/detail-1.jpg', '/assets/industries/startups-founders/detail-2.jpg', '/assets/industries/startups-founders/detail-3.jpg'] },
+    { name: 'Healthcare & Clinical Diagnostics', desc: 'Patient portals, diagnostics support, and secure clinical data systems.', image: '/assets/industries/healthcare-clinical-diagnostics/main.jpg', gallery: ['/assets/industries/healthcare-clinical-diagnostics/detail-1.jpg', '/assets/industries/healthcare-clinical-diagnostics/detail-2.jpg', '/assets/industries/healthcare-clinical-diagnostics/detail-3.jpg'] },
+    { name: 'Public Sector & Government', desc: 'Citizen portals, internal tools, and modernized legacy systems.', image: '/assets/industries/public-sector-government/main.jpg', gallery: ['/assets/industries/public-sector-government/detail-1.jpg', '/assets/industries/public-sector-government/detail-2.jpg', '/assets/industries/public-sector-government/detail-3.jpg'] },
+    { name: 'Utilities & Public Works', desc: 'Asset monitoring, GIS mapping, and infrastructure management systems.', image: '/assets/industries/utilities-public-works/main.jpg', gallery: ['/assets/industries/utilities-public-works/detail-1.jpg', '/assets/industries/utilities-public-works/detail-2.jpg', '/assets/industries/utilities-public-works/detail-3.jpg'] },
+    { name: 'Urban Planning & Smart Cities', desc: 'Digital twins and spatial analytics for city-scale planning.', image: '/assets/industries/urban-planning-smart-cities/main.jpg', gallery: ['/assets/industries/urban-planning-smart-cities/detail-1.jpg', '/assets/industries/urban-planning-smart-cities/detail-2.jpg', '/assets/industries/urban-planning-smart-cities/detail-3.jpg'] },
     { name: 'Real Estate & Property Mgmt', desc: 'Listing platforms, CRM integrations, and property intelligence.', image: '/assets/realEstate.png' },
     { name: 'Retail & Market Intelligence', desc: 'Location intelligence and customer profiling for smarter site selection.', image: '/assets/retailMarket.png' },
     { name: 'Logistics & Supply Chain', desc: 'Fleet tracking, route optimization, and ERP integrations.', image: '/assets/logistics.png' },
