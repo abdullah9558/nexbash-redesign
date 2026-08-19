@@ -1,7 +1,8 @@
 node_modules
 .next
 out
+.env
+.env.local
 *.log
 .DS_Store
 server/leads.json
-config.bat
