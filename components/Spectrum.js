@@ -22,7 +22,7 @@ export default function Spectrum({ studios = [] }) {
           <Link
             className="studio-service-card"
             key={studio.id}
-            href={`/studios/${studio.id}`}
+            href={`/services/${studio.id}`}
             onClick={(event) => {
               if (didDrag.current) {
                 event.preventDefault();

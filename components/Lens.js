@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 const CAP_IMAGES = {
-  'ai-ml': '/assets/studio-ai-ml.png',
-  geospatial: '/assets/studio-gis.png',
-  'data-science': '/assets/studio-data-science.png',
-  blockchain: '/assets/studio-blockchain.png',
-  'web-mobile': '/assets/studio-web-mobile.png',
-  'design-ux': '/assets/studio-design-ux.png',
-  qa: '/assets/studio-qa-security.png',
-  'devops-cloud': '/assets/studio-cloud-devops.png',
+  'ai-ml': '/assets/studios/ai-ml/main.jpg',
+  geospatial: '/assets/studios/gis/main.jpg',
+  'data-science': '/assets/studios/data-science/main.jpg',
+  blockchain: '/assets/studios/blockchain/main.jpg',
+  'web-mobile': '/assets/studios/web-mobile/main.jpg',
+  'design-ux': '/assets/studios/design-ux/main.jpg',
+  qa: '/assets/studios/qa-security/main.jpg',
+  'devops-cloud': '/assets/studios/cloud-devops/main.jpg',
 };
 
 const CAP_DETAILS = {
@@ -47,6 +47,7 @@ export default function Lens({ capabilities = [] }) {
   if (!capability) return null;
 
   const image = CAP_IMAGES[capability.id] || '/assets/studio-ai-ml.png';
+  const serviceHref = `/services/${capability.serviceId || capability.id}`;
 
   const trackPointer = (event) => {
     const node = consoleRef.current;
@@ -89,7 +90,7 @@ export default function Lens({ capabilities = [] }) {
           ))}
         </div>
 
-        <Link className="capability-hologram" key={`visual-${capability.id}`} href={`/capabilities/${capability.id}`}>
+        <Link className="capability-hologram" key={`visual-${capability.id}`} href={serviceHref}>
           <div className="capability-orbit orbit-a" />
           <div className="capability-orbit orbit-b" />
           <div className="capability-scan" />
@@ -98,7 +99,7 @@ export default function Lens({ capabilities = [] }) {
         </Link>
 
         <div className="capability-readout" key={`copy-${capability.id}`}>
-          <h3><Link href={`/capabilities/${capability.id}`}>{capability.name}</Link></h3>
+          <h3><Link href={serviceHref}>{capability.name}</Link></h3>
           <p>{capability.desc}</p>
           <div className="capability-meter">
             <span style={{ width: `${68 + active * 4}%` }} />
@@ -107,7 +108,7 @@ export default function Lens({ capabilities = [] }) {
             <span>MODULE {String(active + 1).padStart(2, '0')}</span>
             <span>{String(capabilities.length).padStart(2, '0')} ACTIVE NODES</span>
           </div>
-          <Link className="case-detail-button capability-detail-button" href={`/capabilities/${capability.id}`}>
+          <Link className="case-detail-button capability-detail-button" href={serviceHref}>
             Explore capability
           </Link>
         </div>
