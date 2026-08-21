@@ -3,6 +3,17 @@
 import Link from 'next/link';
 import useDragScroll from '@/components/useDragScroll';
 
+const HERO_SERVICE_THUMBNAILS = {
+  gis: '/assets/service-thumbnails/gis.png',
+  'ai-ml': '/assets/service-thumbnails/ai-ml.png',
+  'web-mobile': '/assets/service-thumbnails/web-mobile.png',
+  'data-science': '/assets/service-thumbnails/data-science.png',
+  'cloud-devops': '/assets/service-thumbnails/cloud-devops.png',
+  blockchain: '/assets/service-thumbnails/blockchain.png',
+  'design-ux': '/assets/service-thumbnails/design-ux.png',
+  'qa-security': '/assets/service-thumbnails/qa-security.png',
+};
+
 export default function Spectrum({ studios = [] }) {
   const { ref: railRef, didDrag } = useDragScroll();
 
@@ -30,7 +41,7 @@ export default function Spectrum({ studios = [] }) {
               }
             }}
           >
-            <img src={studio.image} alt="" />
+            <img src={HERO_SERVICE_THUMBNAILS[studio.id] || studio.image} alt="" />
             <div className="studio-service-shade" />
             <div className="studio-service-copy"><h3>{studio.title}</h3><p>{studio.modalDesc}</p></div>
           </Link>

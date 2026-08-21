@@ -10107,12 +10107,16 @@ html {
   }
 }
 
-/* Responsive Studio artwork: containers follow source ratios, with no crop or letterboxing. */
+/* Taller responsive cards for the Hero page Studios/Services section. */
+.band.screen.studio-services.is-expanded {
+  min-height: 100svh !important;
+}
+
 .studio-service-card,
 .studio-services.is-expanded .studio-service-card {
   height: auto !important;
   min-height: 0 !important;
-  aspect-ratio: 798 / 433 !important;
+  aspect-ratio: 6 / 5 !important;
   background: transparent;
 }
 
@@ -10170,7 +10174,7 @@ html {
 @media (min-width: 768px) {
   .band.screen.studio-services.is-expanded {
     height: auto !important;
-    min-height: 0 !important;
+    min-height: 100svh !important;
     max-height: none !important;
     overflow: visible !important;
   }
