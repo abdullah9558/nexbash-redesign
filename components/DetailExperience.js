@@ -23,7 +23,7 @@ export default function DetailExperience({ data }) {
           {data.highlights?.length > 0 && <div className="long-detail-chips">{data.highlights.slice(0, 4).map((item) => <b key={item}>{item}</b>)}</div>}
           <div className="long-detail-hero-actions"><Link className="go" href="/#contact">Discuss your project</Link><a className="ghost" href="#explore-detail">Explore the brief ↓</a></div>
         </div>
-        <div className="long-detail-visual"><img src={data.image} alt="" /><span>{data.type} · Nexbash Systems</span><div className="long-detail-visual-index">01</div></div>
+        <div className="long-detail-visual"><img src={data.image} alt="" loading="eager" decoding="async" /><span>{data.type} · Nexbash Systems</span><div className="long-detail-visual-index">01</div></div>
       </header>
 
       {data.metrics?.length > 0 && <section className="long-detail-metrics">{data.metrics.slice(0, 4).map((metric) => <article key={`${metric.value}-${metric.label}`}><strong>{metric.value}</strong><span>{metric.label}</span></article>)}</section>}
@@ -35,7 +35,7 @@ export default function DetailExperience({ data }) {
 
       <section className="long-detail-gallery">
         {(data.gallery?.length ? data.gallery : [data.image, data.image, data.image]).map((image, index) => (
-          <div key={`${image}-${index}`}><img src={image} alt="" /></div>
+          <div key={`${image}-${index}`}><img src={image} alt="" loading={index === 0 ? 'eager' : 'lazy'} decoding="async" /></div>
         ))}
       </section>
 

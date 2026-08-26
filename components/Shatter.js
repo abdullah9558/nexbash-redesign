@@ -145,12 +145,14 @@ export default function Shatter({ projects = [] }) {
                 select(i);
               }}
             >
-              <span
-                className="shard-thumb-media"
-                style={{
-                  backgroundImage: `url('${item.image || PROJECT_IMAGES[item.id] || `/assets/project-${item.id}.png`}')`,
-                }}
-              />
+              <span className="shard-thumb-media">
+                <img
+                  src={item.image || PROJECT_IMAGES[item.id] || `/assets/project-${item.id}.png`}
+                  alt=""
+                  loading={i < 4 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+              </span>
               <span className="shard-thumb-label">{item.title}</span>
             </button>
           ))}
