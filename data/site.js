@@ -136,6 +136,8 @@ const site = {
       tag: 'GEOSPATIAL INTELLIGENCE · MARKET INSIGHTS · BUSINESS INTELLIGENCE',
       title: 'Business Intelligence & Market Insights Platform',
       desc: 'A GIS-based SaaS platform unifying fragmented business registration data and consumer behavior silos to drive smarter site selection and targeted marketing campaigns.',
+      image: '/assets/projects/market-insights/main.jpg',
+      gallery: ['/assets/projects/market-insights/detail-1.jpg', '/assets/projects/market-insights/detail-2.jpg', '/assets/projects/market-insights/detail-3.jpg'],
       stats: [
         { value: '92%', label: 'Growth prediction accuracy' },
         { value: '4x', label: 'Optimized marketing' },
@@ -344,7 +346,8 @@ const site = {
       tag: 'Business Intelligence · Retail · Marketing Technology',
       title: 'Business Intelligence & Market Insights Platform',
       description: 'A GIS-Based SaaS platform unifying fragmented business registration data and consumer behavior silos to drive smarter site selection and targeted marketing campaigns.',
-      image: '/assets/project-market-insights-16x9.webp',
+      image: '/assets/projects/market-insights/main.jpg',
+      gallery: ['/assets/projects/market-insights/detail-1.jpg', '/assets/projects/market-insights/detail-2.jpg', '/assets/projects/market-insights/detail-3.jpg'],
       industry: 'Business Intelligence · Retail · Marketing Technology',
       duration: '28 months (Ongoing) · 6-10 engineers, data specialists, and product designers',
       metrics: [

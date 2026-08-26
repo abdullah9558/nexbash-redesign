@@ -12,7 +12,7 @@ const PROJECT_IMAGES = {
   'healthcare-ai': '/assets/project-healthcare-ai-16x9.webp',
   'work-os': '/assets/project-work-os-16x9.webp',
   'fashion-ree': '/assets/project-fashion-ree-16x9.webp',
-  'market-insights': '/assets/project-market-insights-16x9.webp',
+  'market-insights': '/assets/projects/market-insights/main.jpg',
   'smart-home': '/assets/project-smart-home-16x9.webp',
   'digital-archive': '/assets/project-digital-archive-16x9.webp',
   'property-regtech': '/assets/project-property-regtech-16x9.webp',
@@ -80,7 +80,7 @@ export default function Shatter({ projects = [] }) {
 
   if (!p) return null;
 
-  const img = PROJECT_IMAGES[p.id] || `/assets/project-${p.id}.png`;
+  const img = p.image || PROJECT_IMAGES[p.id] || `/assets/project-${p.id}.png`;
   const stats = Array.isArray(p.stats)
     ? p.stats.map((s) => (typeof s === 'string' ? s : `${s.value} · ${s.label}`))
     : [];
@@ -148,7 +148,7 @@ export default function Shatter({ projects = [] }) {
               <span
                 className="shard-thumb-media"
                 style={{
-                  backgroundImage: `url('${PROJECT_IMAGES[item.id] || `/assets/project-${item.id}.png`}')`,
+                  backgroundImage: `url('${item.image || PROJECT_IMAGES[item.id] || `/assets/project-${item.id}.png`}')`,
                 }}
               />
               <span className="shard-thumb-label">{item.title}</span>
