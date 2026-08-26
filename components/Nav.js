@@ -61,7 +61,7 @@ export default function Nav({ forceSolid = false }) {
     <>
       <header className={`topnav ${effectiveSolid ? 'is-solid' : ''}`}>
       <a href="/#top" className="brand">
-        <BrandLogo src="/assets/nexbash-logo.png" />
+        <BrandLogo src={effectiveSolid ? '/assets/nexbash-logo.png' : '/assets/nexbash-logo-white.png'} />
       </a>
       <nav className={open ? 'open' : ''}>
         {menus.map((menu) => (

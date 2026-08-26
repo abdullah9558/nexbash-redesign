@@ -16,7 +16,7 @@ export default function Certifications() {
   return (
     <section className="band certifications awards-exact" id="certifications" data-reveal>
       <header className="awards-exact-head reveal-child" style={{ '--i': 0 }}>
-        <p className="kicker">Achievements</p>
+        <p className="kicker">Trusted By</p>
       </header>
       <div className="awards-logo-strip reveal-child" style={{ '--i': 1 }}>
         <div className="awards-logo-track">

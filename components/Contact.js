@@ -4,18 +4,34 @@ import { useState } from 'react';
 
 export default function Contact() {
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
-  const sendQuery = (event) => {
+  const sendQuery = async (event) => {
     event.preventDefault();
-    const form = new FormData(event.currentTarget);
+    const formElement = event.currentTarget;
+    setSending(true);
+    setError('');
+    const form = new FormData(formElement);
     const name = String(form.get('name') || '').trim();
     const email = String(form.get('email') || '').trim();
     const message = String(form.get('message') || '').trim();
-    const subject = encodeURIComponent(`Nexbash website query from ${name}`);
-    const body = encodeURIComponent(`Name: ${name}\nReply email: ${email}\n\nQuery:\n${message}`);
 
-    window.location.href = `mailto:info@nexbash.com?subject=${subject}&body=${body}`;
-    setSent(true);
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(result.error || 'Unable to send your query right now.');
+      setSent(true);
+      formElement.reset();
+    } catch (submitError) {
+      setError(submitError.message || 'Unable to send your query right now.');
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -53,9 +69,10 @@ export default function Contact() {
               Notes
               <textarea name="message" rows={4} required placeholder="What are you building?" />
             </label>
-            <button type="submit" className="go go-pulse">
-              Send to info@nexbash.com
+            <button type="submit" className="go go-pulse" disabled={sending}>
+              {sending ? 'Sending…' : 'Send Query'}
             </button>
+            {error && <p className="form-error" role="alert">{error}</p>}
           </form>
         )}
       </div>
