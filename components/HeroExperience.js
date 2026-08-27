@@ -1,22 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function HeroExperience() {
   const experienceRef = useRef(null);
   const videoRef = useRef(null);
-  const [videoEnabled, setVideoEnabled] = useState(false);
-
-  useEffect(() => {
-    const enable = () => setVideoEnabled(true);
-    const events = ['pointerdown', 'touchstart', 'keydown', 'scroll'];
-    events.forEach((event) => window.addEventListener(event, enable, { passive: true, once: true }));
-    return () => events.forEach((event) => window.removeEventListener(event, enable));
-  }, []);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !videoEnabled) return undefined;
+    if (!video) return undefined;
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
@@ -24,7 +16,6 @@ export default function HeroExperience() {
     const resume = () => {
       if (!document.hidden && video.paused) play();
     };
-    video.load();
     play();
     video.addEventListener('canplay', play);
     document.addEventListener('visibilitychange', resume);
@@ -32,7 +23,7 @@ export default function HeroExperience() {
       video.removeEventListener('canplay', play);
       document.removeEventListener('visibilitychange', resume);
     };
-  }, [videoEnabled]);
+  }, []);
 
   const onPointerMove = (event) => {
     const node = experienceRef.current;
@@ -64,10 +55,11 @@ export default function HeroExperience() {
         muted
         loop
         playsInline
-        preload="none"
+        preload="auto"
         aria-hidden="true"
       >
-        {videoEnabled && <source src="/assets/hero-bg-video.mp4" type="video/mp4" />}
+        <source src="/assets/hero-bg-video.webm" type="video/webm" />
+        <source src="/assets/hero-bg-video.mp4" type="video/mp4" />
       </video>
     </div>
   );
