@@ -20,6 +20,7 @@ export default function GeoField({ className = '' }) {
     const onMove = (e) => {
       tx = (e.clientX / window.innerWidth - 0.5) * 2;
       ty = (e.clientY / window.innerHeight - 0.5) * 2;
+      if (!raf) raf = requestAnimationFrame(tick);
     };
 
     const tick = () => {
@@ -27,10 +28,9 @@ export default function GeoField({ className = '' }) {
       my += (ty - my) * 0.05;
       root.style.setProperty('--gx', `${mx * 18}px`);
       root.style.setProperty('--gy', `${my * 12}px`);
-      raf = requestAnimationFrame(tick);
+      if (Math.abs(tx - mx) > 0.002 || Math.abs(ty - my) > 0.002) raf = requestAnimationFrame(tick);
+      else raf = 0;
     };
-
-    raf = requestAnimationFrame(tick);
     window.addEventListener('mousemove', onMove, { passive: true });
     return () => {
       cancelAnimationFrame(raf);

@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 const CAP_IMAGES = {
-  'ai-ml': '/assets/service-thumbnails/ai-ml.png',
-  geospatial: '/assets/service-thumbnails/gis.png',
-  'data-science': '/assets/service-thumbnails/data-science.png',
-  blockchain: '/assets/service-thumbnails/blockchain.png',
-  'web-mobile': '/assets/service-thumbnails/web-mobile.png',
-  'design-ux': '/assets/service-thumbnails/design-ux.png',
-  qa: '/assets/service-thumbnails/qa-security.png',
-  'devops-cloud': '/assets/service-thumbnails/cloud-devops.png',
+  'ai-ml': '/assets/service-thumbnails/ai-ml.webp',
+  geospatial: '/assets/service-thumbnails/gis.webp',
+  'data-science': '/assets/service-thumbnails/data-science.webp',
+  blockchain: '/assets/service-thumbnails/blockchain.webp',
+  'web-mobile': '/assets/service-thumbnails/web-mobile.webp',
+  'design-ux': '/assets/service-thumbnails/design-ux.webp',
+  qa: '/assets/service-thumbnails/qa-security.webp',
+  'devops-cloud': '/assets/service-thumbnails/cloud-devops.webp',
 };
 
 const CAP_DETAILS = {

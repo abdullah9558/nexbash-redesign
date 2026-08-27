@@ -4,14 +4,14 @@ import Link from 'next/link';
 import useDragScroll from '@/components/useDragScroll';
 
 const HERO_SERVICE_THUMBNAILS = {
-  gis: '/assets/service-thumbnails/gis.png',
-  'ai-ml': '/assets/service-thumbnails/ai-ml.png',
-  'web-mobile': '/assets/service-thumbnails/web-mobile.png',
-  'data-science': '/assets/service-thumbnails/data-science.png',
-  'cloud-devops': '/assets/service-thumbnails/cloud-devops.png',
-  blockchain: '/assets/service-thumbnails/blockchain.png',
-  'design-ux': '/assets/service-thumbnails/design-ux.png',
-  'qa-security': '/assets/service-thumbnails/qa-security.png',
+  gis: '/assets/service-thumbnails/gis.webp',
+  'ai-ml': '/assets/service-thumbnails/ai-ml.webp',
+  'web-mobile': '/assets/service-thumbnails/web-mobile.webp',
+  'data-science': '/assets/service-thumbnails/data-science.webp',
+  'cloud-devops': '/assets/service-thumbnails/cloud-devops.webp',
+  blockchain: '/assets/service-thumbnails/blockchain.webp',
+  'design-ux': '/assets/service-thumbnails/design-ux.webp',
+  'qa-security': '/assets/service-thumbnails/qa-security.webp',
 };
 
 export default function Spectrum({ studios = [] }) {

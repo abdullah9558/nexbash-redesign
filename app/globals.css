@@ -2072,7 +2072,7 @@ body:has(.ap-modal.open) .topnav {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  image-rendering: -webkit-optimize-contrast;
+  image-rendering: auto;
   transform: none;
 }
 

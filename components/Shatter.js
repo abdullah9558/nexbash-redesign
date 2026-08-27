@@ -10,12 +10,17 @@ import Link from 'next/link';
 const PROJECT_IMAGES = {
   geospatial: '/assets/project-geospatial-16x9.webp',
   'healthcare-ai': '/assets/project-healthcare-ai-16x9.webp',
-  'work-os': '/assets/project-work-os-16x9.webp',
-  'fashion-ree': '/assets/project-fashion-ree-16x9.webp',
+  'work-os': '/assets/project-work-os-hq.webp',
+  'fashion-ree': '/assets/project-fashion-ree-hq.webp',
   'market-insights': '/assets/projects/market-insights/main.jpg',
-  'smart-home': '/assets/project-smart-home-16x9.webp',
-  'digital-archive': '/assets/project-digital-archive-16x9.webp',
-  'property-regtech': '/assets/project-property-regtech-16x9.webp',
+  'smart-home': '/assets/project-smart-home-hq.webp',
+  'digital-archive': '/assets/project-digital-archive-hq.webp',
+  'property-regtech': '/assets/project-property-regtech-hq.webp',
+};
+
+const PROJECT_THUMBNAILS = {
+  ...PROJECT_IMAGES,
+  'market-insights': '/assets/project-market-insights-16x9.webp',
 };
 
 const DetailModal = () => null;
@@ -147,7 +152,7 @@ export default function Shatter({ projects = [] }) {
             >
               <span className="shard-thumb-media">
                 <img
-                  src={item.image || PROJECT_IMAGES[item.id] || `/assets/project-${item.id}.png`}
+                  src={PROJECT_THUMBNAILS[item.id] || item.image || `/assets/project-${item.id}.png`}
                   alt=""
                   loading={i < 4 ? 'eager' : 'lazy'}
                   decoding="async"

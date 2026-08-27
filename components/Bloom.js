@@ -53,6 +53,7 @@ export default function Bloom() {
         spawn(tx, ty);
         last = now;
       }
+      if (!raf) raf = requestAnimationFrame(tick);
     };
 
     const tick = () => {
@@ -62,9 +63,12 @@ export default function Bloom() {
       by += (ty - by) * 0.1;
       a.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       b.style.transform = `translate3d(${bx}px, ${by}px, 0)`;
-      raf = requestAnimationFrame(tick);
+      if (Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5 || Math.abs(tx - bx) > 0.5 || Math.abs(ty - by) > 0.5) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        raf = 0;
+      }
     };
-    raf = requestAnimationFrame(tick);
     window.addEventListener('mousemove', move, { passive: true });
 
     return () => {

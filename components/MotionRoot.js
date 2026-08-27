@@ -37,11 +37,11 @@ export default function MotionRoot() {
       { threshold: 0.08, rootMargin: '0px 0px -4% 0px' }
     );
 
-    nodes.forEach((el) => {
+    const initiallyVisible = new Set(nodes.filter((el) => {
       const rect = el.getBoundingClientRect();
-      if (rect.top < window.innerHeight * 0.92 && rect.bottom > 0) mark(el);
-      else io.observe(el);
-    });
+      return rect.top < window.innerHeight * 0.92 && rect.bottom > 0;
+    }));
+    nodes.forEach((el) => initiallyVisible.has(el) ? mark(el) : io.observe(el));
 
     const safety = window.setTimeout(() => nodes.forEach(mark), 900);
 
@@ -56,22 +56,26 @@ export default function MotionRoot() {
       frame += 1;
       px += (tx - px) * 0.12;
       py += (ty - py) * 0.12;
-      if (frame % 2 === 0) {
-        root.style.setProperty('--mx', ((px - 0.5) * 2).toFixed(3));
-        root.style.setProperty('--my', ((py - 0.5) * 2).toFixed(3));
-        root.style.setProperty('--scroll', scrollY.toFixed(3));
-      }
-      raf.current = requestAnimationFrame(tick);
+      root.style.setProperty('--mx', ((px - 0.5) * 2).toFixed(3));
+      root.style.setProperty('--my', ((py - 0.5) * 2).toFixed(3));
+      root.style.setProperty('--scroll', scrollY.toFixed(3));
+      if (Math.abs(tx - px) > 0.002 || Math.abs(ty - py) > 0.002) raf.current = requestAnimationFrame(tick);
+      else raf.current = 0;
     };
-    raf.current = requestAnimationFrame(tick);
+
+    const schedule = () => {
+      if (!raf.current) raf.current = requestAnimationFrame(tick);
+    };
 
     const onMove = (e) => {
       tx = e.clientX / window.innerWidth;
       ty = e.clientY / window.innerHeight;
+      schedule();
     };
 
     const onScroll = () => {
       scrollY = window.scrollY / Math.max(1, document.body.scrollHeight - window.innerHeight);
+      schedule();
     };
 
     window.addEventListener('mousemove', onMove, { passive: true });
