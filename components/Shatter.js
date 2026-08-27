@@ -19,8 +19,14 @@ const PROJECT_IMAGES = {
 };
 
 const PROJECT_THUMBNAILS = {
-  ...PROJECT_IMAGES,
-  'market-insights': '/assets/project-market-insights-16x9.webp',
+  geospatial: '/assets/project-thumbnails/geospatial.webp',
+  'healthcare-ai': '/assets/project-thumbnails/healthcare-ai.webp',
+  'work-os': '/assets/project-thumbnails/work-os.webp',
+  'fashion-ree': '/assets/project-thumbnails/fashion-ree.webp',
+  'market-insights': '/assets/project-thumbnails/market-insights.webp',
+  'smart-home': '/assets/project-thumbnails/smart-home.webp',
+  'digital-archive': '/assets/project-thumbnails/digital-archive.webp',
+  'property-regtech': '/assets/project-thumbnails/property-regtech.webp',
 };
 
 const DetailModal = () => null;

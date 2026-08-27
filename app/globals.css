@@ -10163,6 +10163,27 @@ html {
   #faq .faq-a p { color: #53687c !important; }
 }
 
+/* Package state classes control carousel behavior, not default emphasis. */
+.packages-section .pack,
+.packages-section .pack.hot,
+.packages-section .pack.pack-live {
+  background: var(--card) !important;
+  border-color: rgba(4, 28, 53, 0.16) !important;
+  color: var(--ink) !important;
+}
+
+.packages-section .pack:hover,
+.packages-section .pack.hot:hover,
+.packages-section .pack.pack-live:hover {
+  background: linear-gradient(165deg, rgba(255, 74, 19, 0.16), var(--card) 48%) !important;
+  border-color: rgba(255, 74, 19, 0.42) !important;
+  box-shadow:
+    0 4px 0 rgba(255, 74, 19, 0.12),
+    0 24px 54px rgba(255, 74, 19, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.76) inset !important;
+  transform: translateY(-4px) !important;
+}
+
 /* Nested mobile navigation accordions. */
 @media (max-width: 767px) {
   .topnav .nav-submenu-panel {
