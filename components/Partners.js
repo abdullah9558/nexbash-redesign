@@ -14,7 +14,7 @@ export default function Partners({ partners }) {
         <div className="partner-track">
           {loop.map((p, i) => (
             <span key={`a-${p.alt}-${i}`} className="partner-chip site-logo-cell tilt">
-              <img src={p.src} alt={p.alt} />
+              <img src={p.src} alt={p.alt} loading="lazy" decoding="async" fetchPriority="low" />
             </span>
           ))}
         </div>
@@ -23,7 +23,7 @@ export default function Partners({ partners }) {
         <div className="partner-track partner-track-rev">
           {loopB.map((p, i) => (
             <span key={`b-${p.alt}-${i}`} className="partner-chip site-logo-cell tilt">
-              <img src={p.src} alt={p.alt} />
+              <img src={p.src} alt={p.alt} loading="lazy" decoding="async" fetchPriority="low" />
             </span>
           ))}
         </div>

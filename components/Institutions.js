@@ -24,7 +24,13 @@ export default function Institutions() {
               key={`${institution.name}-${index}`}
               aria-hidden={index >= institutions.length}
             >
-              <img src={institution.image} alt={index < institutions.length ? institution.name : ''} />
+              <img
+                src={institution.image}
+                alt={index < institutions.length ? institution.name : ''}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
+              />
             </article>
           ))}
         </div>

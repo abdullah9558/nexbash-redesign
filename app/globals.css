@@ -3748,6 +3748,20 @@ body:has(.ap-modal.open) .topnav {
   animation: fade-up 0.9s var(--ease) forwards;
 }
 
+/* Keep the LCP heading immediately paintable. */
+.hero-title-ready {
+  opacity: 1;
+}
+
+/* Skip layout and paint work for sections that are still far below the viewport. */
+main > .band,
+main > .partners,
+main > .contact,
+body > footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
+}
+
 .hero-copy .anim-fade:nth-child(1) {
   animation-delay: 0.05s;
 }

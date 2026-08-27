@@ -41,7 +41,13 @@ export default function Spectrum({ studios = [] }) {
               }
             }}
           >
-            <img src={HERO_SERVICE_THUMBNAILS[studio.id] || studio.image} alt="" />
+            <img
+              src={HERO_SERVICE_THUMBNAILS[studio.id] || studio.image}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              fetchPriority="low"
+            />
             <div className="studio-service-shade" />
             <div className="studio-service-copy"><h3>{studio.title}</h3><p>{studio.modalDesc}</p></div>
           </Link>

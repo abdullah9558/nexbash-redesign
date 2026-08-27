@@ -13,7 +13,7 @@ export default function Hero({ heroBar = [] }) {
             Trusted by organizations operating <strong>at scale</strong>
           </p>
           <div className="hero-text-award">
-            <h1 className="anim-fade hero-title">
+            <h1 className="hero-title hero-title-ready">
               <span className="hero-title-line">Turning complex data into</span>
               <span className="hero-title-line hero-title-muted">operational advantage</span>
             </h1>

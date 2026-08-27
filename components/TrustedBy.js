@@ -10,7 +10,7 @@ export default function TrustedBy({ partners = [] }) {
         <div className="marquee-track" id="logoTrack">
           {logos.map((p, i) => (
             <div className="logo-badge" key={`${p.alt}-${i}`}>
-              <img src={p.src} alt={p.alt} />
+              <img src={p.src} alt={p.alt} loading="lazy" decoding="async" fetchPriority="low" />
             </div>
           ))}
         </div>

@@ -43,9 +43,9 @@ export default function Industries({ industries = [] }) {
       <div className="ap-modal-card industries-modal-card">
         <button type="button" className="modal-close" aria-label="Close" onClick={() => setOpen(false)}>×</button>
         <p className="kicker">Who we help</p><h3>Explore every industry</h3><p className="lede">Choose an operating environment to open its dedicated Nexbash solution page.</p>
-        <div className="ap-modal-grid industries-route-grid">{industries.map((industry) => <Link className="ap-modal-item" href={`/industries/${slugify(industry.name)}`} key={industry.name} onClick={() => setOpen(false)}>
+        {open && <div className="ap-modal-grid industries-route-grid">{industries.map((industry) => <Link className="ap-modal-item" href={`/industries/${slugify(industry.name)}`} key={industry.name} onClick={() => setOpen(false)}>
           <div className="ap-modal-thumb" style={{ backgroundImage: `url('${industry.image}')` }} /><h4>{industry.name}</h4><p>{industry.desc}</p><span className="industry-card-action">See More...</span>
-        </Link>)}</div>
+        </Link>)}</div>}
       </div>
     </div>
   </>;

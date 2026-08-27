@@ -25,6 +25,9 @@ export default function Certifications() {
               <img
                 src={item.image}
                 alt={index < certifications.length ? item.name : ''}
+                loading="lazy"
+                decoding="async"
+                fetchPriority="low"
               />
             </div>
           ))}
