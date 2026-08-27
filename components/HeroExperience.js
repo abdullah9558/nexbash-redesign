@@ -65,7 +65,6 @@ export default function HeroExperience() {
         loop
         playsInline
         preload="none"
-        poster="/assets/hero-bg-poster.webp"
         aria-hidden="true"
       >
         {videoEnabled && <source src="/assets/hero-bg-video.mp4" type="video/mp4" />}
