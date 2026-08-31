@@ -10325,6 +10325,19 @@ html {
   }
 }
 
+/* Preserve the original service-gallery heights while showing square media in full. */
+.service-detail-page .long-detail-gallery > div:nth-child(2),
+.service-detail-page .long-detail-gallery > div:nth-child(3) {
+  background: #071421;
+}
+
+.service-detail-page .long-detail-gallery > div:nth-child(2) img,
+.service-detail-page .long-detail-gallery > div:nth-child(3) img {
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none !important;
+}
+
 /* Compact mobile section rhythm and top-state logo behavior. */
 @media (min-width: 768px) {
   .topnav:hover {
