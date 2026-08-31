@@ -39,6 +39,8 @@ const menus = [
 export default function Nav({ forceSolid = false }) {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [canHover, setCanHover] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState(null);
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
 
@@ -47,6 +49,17 @@ export default function Nav({ forceSolid = false }) {
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const hoverQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const updateHoverSupport = () => {
+      setCanHover(hoverQuery.matches);
+      if (!hoverQuery.matches) setHovered(false);
+    };
+    updateHoverSupport();
+    hoverQuery.addEventListener('change', updateHoverSupport);
+    return () => hoverQuery.removeEventListener('change', updateHoverSupport);
   }, []);
 
   const closeNav = () => {
@@ -59,9 +72,13 @@ export default function Nav({ forceSolid = false }) {
 
   return (
     <>
-      <header className={`topnav ${effectiveSolid ? 'is-solid' : ''}`}>
+      <header
+        className={`topnav ${effectiveSolid ? 'is-solid' : ''}`}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
       <a href="/#top" className="brand">
-        <BrandLogo src={effectiveSolid ? '/assets/nexbash-logo.png' : '/assets/nexbash-logo-white.png'} />
+        <BrandLogo src={canHover && hovered ? '/assets/nexbash-logo-white.png' : '/assets/nexbash-logo.png'} />
       </a>
       <nav className={open ? 'open' : ''}>
         {menus.map((menu) => (
