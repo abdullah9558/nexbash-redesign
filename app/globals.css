@@ -10339,20 +10339,6 @@ html {
 }
 
 /* Compact mobile section rhythm and top-state logo behavior. */
-@media (min-width: 768px) {
-  .topnav:hover {
-    background: rgba(7, 26, 47, 0.96);
-    border-color: rgba(255, 255, 255, 0.14);
-    box-shadow: 0 16px 42px rgba(7, 26, 47, 0.24);
-  }
-
-  .topnav:hover nav,
-  .topnav:hover nav > a,
-  .topnav:hover .nav-menu-label {
-    color: rgba(255, 255, 255, 0.92);
-  }
-}
-
 @media (max-width: 767px) {
   main > section:not(.hero),
   .band,

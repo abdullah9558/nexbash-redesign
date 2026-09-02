@@ -39,7 +39,6 @@ const menus = [
 export default function Nav({ forceSolid = false }) {
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const [canHover, setCanHover] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState(null);
   const [expandedSubmenu, setExpandedSubmenu] = useState(null);
@@ -55,7 +54,6 @@ export default function Nav({ forceSolid = false }) {
     const hoverQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
     const updateHoverSupport = () => {
       setCanHover(hoverQuery.matches);
-      if (!hoverQuery.matches) setHovered(false);
     };
     updateHoverSupport();
     hoverQuery.addEventListener('change', updateHoverSupport);
@@ -74,11 +72,9 @@ export default function Nav({ forceSolid = false }) {
     <>
       <header
         className={`topnav ${effectiveSolid ? 'is-solid' : ''}`}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
       >
       <a href="/#top" className="brand">
-        <BrandLogo src={canHover && hovered ? '/assets/nexbash-logo-white.png' : '/assets/nexbash-logo.png'} />
+        <BrandLogo src={canHover && !effectiveSolid ? '/assets/nexbash-logo-white.png' : '/assets/nexbash-logo.png'} />
       </a>
       <nav className={open ? 'open' : ''}>
         {menus.map((menu) => (
