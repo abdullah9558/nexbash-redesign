@@ -7284,7 +7284,7 @@ body {
 .directory-page > header { width: min(calc(var(--max) + 6rem), calc(100% - 2rem)); margin: 0 auto; padding: 6rem 0 3rem; }
 .directory-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; width: min(calc(var(--max) + 6rem), calc(100% - 2rem)); margin: 0 auto; }
 .directory-grid > a { position: relative; min-height: 380px; overflow: hidden; padding: 1.2rem; border: 1px solid var(--line); border-radius: 20px; background: var(--card); color: var(--ink); }
-.directory-grid img { width: calc(100% + 2.4rem); height: 190px; margin: -1.2rem -1.2rem 1rem; object-fit: cover; }
+.directory-grid img { width: calc(100% + 2.4rem); max-width: none; height: 190px; margin: -1.2rem -1.2rem 1rem; object-fit: cover; }
 .directory-grid span { color: var(--orange); font-family: var(--mono); font-size: .68rem; }
 .directory-grid h2 { margin: .3rem 0; font-family: var(--display); font-size: 1.25rem; }
 .directory-grid p { color: var(--muted); font-size: .85rem; }
@@ -10338,6 +10338,59 @@ html {
   transform: none !important;
 }
 
+/* Two-image service galleries use equal columns and reveal each square image in full. */
+.service-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  height: auto;
+}
+
+.service-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) > div {
+  aspect-ratio: 1;
+  background: #071421;
+}
+
+.service-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) > div:first-child {
+  grid-column: auto;
+}
+
+.service-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none !important;
+}
+
+/* Industry detail galleries also settle into a balanced two-image presentation. */
+.industry-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  height: auto;
+}
+
+.industry-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) > div {
+  aspect-ratio: 1;
+  background: #071421;
+}
+
+.industry-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) > div:first-child {
+  grid-column: auto;
+}
+
+.industry-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain !important;
+  object-position: center !important;
+  transform: none !important;
+}
+
+@media (max-width: 767px) {
+  .service-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child),
+  .industry-detail-page .long-detail-gallery:has(> div:nth-child(2):last-child) {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Compact mobile section rhythm and top-state logo behavior. */
 @media (max-width: 767px) {
   main > section:not(.hero),
@@ -10383,3 +10436,6 @@ html {
 }
 
 
+
+/* Each industry tab shows its assigned image at its natural aspect ratio. */
+.industry-panel-image { display: block; width: 100%; height: auto; margin-top: 1.5rem; border-radius: 16px; }
