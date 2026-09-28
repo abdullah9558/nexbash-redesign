@@ -16,13 +16,13 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"npm run dev:web\" \"npm run dev:api\"",
-    "dev:web": "next dev -p 3000",
-    "dev:api": "node server/index.js",
-    "build": "next build",
-    "start": "concurrently \"next start -p 3000\" \"node server/index.js\"",
-    "start:web": "next start -p 3000",
-    "start:api": "node server/index.js"
+    "dev": "node init && concurrently \"npm run dev:web\" \"npm run dev:api\"",
+    "dev:web": "node init && next dev -p 3000",
+    "dev:api": "node init && node server/index.js",
+    "build": "node init && next build",
+    "start": "node init && concurrently \"next start -p 3000\" \"node server/index.js\"",
+    "start:web": "node init && next start -p 3000",
+    "start:api": "node init && node server/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
