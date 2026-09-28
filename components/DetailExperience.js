@@ -10,6 +10,10 @@ import Bloom from '@/components/Bloom';
 export default function DetailExperience({ data }) {
   const [active, setActive] = useState(data.panels[0]?.id);
   const panel = data.panels.find((item) => item.id === active) || data.panels[0];
+  const isIndustry = data.type === 'Industry Solution';
+  const panelImage = isIndustry
+    ? { landscape: data.gallery?.[0], solutions: data.gallery?.[1] }[panel.id]
+    : null;
 
   return (<>
     <GeoField className="detail-geo" />
@@ -30,14 +34,16 @@ export default function DetailExperience({ data }) {
 
       <section className="long-detail-explorer" id="explore-detail">
         <div className="long-detail-tabs" role="tablist">{data.panels.map((item, index) => <button key={item.id} type="button" className={active === item.id ? 'on' : ''} onClick={() => setActive(item.id)}><span>{String(index + 1).padStart(2, '0')}</span>{item.label}</button>)}</div>
-        <div className="long-detail-panel" key={panel.id}><p className="long-detail-panel-intro">{panel.intro}</p><div className="long-detail-blocks">{panel.blocks.map((block) => <article key={block.title}><h2>{block.title}</h2><p>{block.text}</p>{block.items?.length > 0 && <ul>{block.items.map((item) => <li key={item}>{item}</li>)}</ul>}</article>)}</div></div>
+        <div className="long-detail-panel" key={panel.id}><p className="long-detail-panel-intro">{panel.intro}</p><div className="long-detail-blocks">{panel.blocks.map((block) => <article key={block.title}><h2>{block.title}</h2><p>{block.text}</p>{block.items?.length > 0 && <ul>{block.items.map((item) => <li key={item}>{item}</li>)}</ul>}</article>)}</div>
+          {panelImage && <img className="industry-panel-image" src={panelImage} alt={`${data.title} — ${panel.label}`} decoding="async" />}
+        </div>
       </section>
 
-      <section className="long-detail-gallery">
+      {!isIndustry && <section className="long-detail-gallery">
         {(data.gallery?.length ? data.gallery : [data.image, data.image, data.image]).map((image, index) => (
           <div key={`${image}-${index}`}><img src={image} alt="" loading={index === 0 ? 'eager' : 'lazy'} decoding="async" /></div>
         ))}
-      </section>
+      </section>}
 
       {data.steps?.length > 0 && <section className="long-detail-timeline"><p className="kicker">{data.deliveryEyebrow}</p><h2>{data.deliveryTitle}</h2><div>{data.steps.map((step, index) => <article key={`${step.title}-${index}`}><span>{String(index + 1).padStart(2, '0')}</span><h3>{step.title}</h3><p>{step.text}</p></article>)}</div></section>}
 
